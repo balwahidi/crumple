@@ -1,0 +1,15 @@
+# Rust
+target/
+
+# Node
+node_modules/
+
+# Benchmark corpus: keep only the fetch script(s) and checksums
+bench/corpus/*
+!bench/corpus/fetch.*
+!bench/corpus/checksums.json
+bench/out/
+
+# OS / logs
+.DS_Store
+*.log

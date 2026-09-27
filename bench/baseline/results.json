@@ -1,0 +1,2906 @@
+{
+  "startedAt": "2026-09-27T18:19:42.324Z",
+  "finishedAt": "2026-09-27T18:23:04.142Z",
+  "runsPerMeasurement": 3,
+  "env": {
+    "cpuModel": "Intel(R) Core(TM) i7-14700KF",
+    "logicalCores": 28,
+    "availableParallelism": 16,
+    "totalMemBytes": 34189799424,
+    "os": "Windows_NT 10.0.26200 (Windows 11 Pro) x64",
+    "node": "v24.16.0",
+    "v8": "13.6.233.17-node.49",
+    "packages": {
+      "@jsquash/png": "3.1.1",
+      "@jsquash/jpeg": "1.6.0",
+      "@jsquash/webp": "1.5.0",
+      "@jsquash/avif": "2.1.1",
+      "@jsquash/oxipng": "2.3.0",
+      "@jsquash/jxl": "1.3.0"
+    },
+    "ssimulacra2": "ssimulacra2_rs 0.5.2",
+    "threading": "single-threaded WASM for every codec (jSquash Node code paths)",
+    "scheduling": {
+      "affinityMask": "0xffff",
+      "priority": 0
+    }
+  },
+  "partial": false,
+  "corpus": {
+    "images": [
+      {
+        "name": "kodim01",
+        "bytes": 736501
+      },
+      {
+        "name": "kodim02",
+        "bytes": 617995
+      },
+      {
+        "name": "kodim03",
+        "bytes": 502888
+      },
+      {
+        "name": "kodim04",
+        "bytes": 637432
+      },
+      {
+        "name": "kodim05",
+        "bytes": 785610
+      },
+      {
+        "name": "kodim06",
+        "bytes": 618959
+      },
+      {
+        "name": "kodim07",
+        "bytes": 566322
+      },
+      {
+        "name": "kodim08",
+        "bytes": 788470
+      },
+      {
+        "name": "kodim09",
+        "bytes": 582899
+      },
+      {
+        "name": "kodim10",
+        "bytes": 593463
+      },
+      {
+        "name": "kodim11",
+        "bytes": 621023
+      },
+      {
+        "name": "kodim12",
+        "bytes": 531024
+      },
+      {
+        "name": "kodim13",
+        "bytes": 822712
+      },
+      {
+        "name": "kodim14",
+        "bytes": 692201
+      },
+      {
+        "name": "kodim15",
+        "bytes": 612582
+      },
+      {
+        "name": "kodim16",
+        "bytes": 534247
+      },
+      {
+        "name": "kodim17",
+        "bytes": 602078
+      },
+      {
+        "name": "kodim18",
+        "bytes": 780947
+      },
+      {
+        "name": "kodim19",
+        "bytes": 671476
+      },
+      {
+        "name": "kodim20",
+        "bytes": 492462
+      },
+      {
+        "name": "kodim21",
+        "bytes": 637051
+      },
+      {
+        "name": "kodim22",
+        "bytes": 701970
+      },
+      {
+        "name": "kodim23",
+        "bytes": 557596
+      },
+      {
+        "name": "kodim24",
+        "bytes": 706397
+      },
+      {
+        "name": "example",
+        "bytes": 3410689
+      }
+    ]
+  },
+  "options": {
+    "mozjpeg": {
+      "quality": 75,
+      "baseline": false,
+      "arithmetic": false,
+      "progressive": true,
+      "optimize_coding": true,
+      "smoothing": 0,
+      "color_space": 3,
+      "quant_table": 3,
+      "trellis_multipass": false,
+      "trellis_opt_zero": false,
+      "trellis_opt_table": false,
+      "trellis_loops": 1,
+      "auto_subsample": true,
+      "chroma_subsample": 2,
+      "separate_chroma_quality": false,
+      "chroma_quality": 75
+    },
+    "webp": {
+      "quality": 75,
+      "target_size": 0,
+      "target_PSNR": 0,
+      "method": 4,
+      "sns_strength": 50,
+      "filter_strength": 60,
+      "filter_sharpness": 0,
+      "filter_type": 1,
+      "partitions": 0,
+      "segments": 4,
+      "pass": 1,
+      "show_compressed": 0,
+      "preprocessing": 0,
+      "autofilter": 0,
+      "partition_limit": 0,
+      "alpha_compression": 1,
+      "alpha_filtering": 1,
+      "alpha_quality": 100,
+      "lossless": 0,
+      "exact": 0,
+      "image_hint": 0,
+      "emulate_jpeg_size": 0,
+      "thread_level": 0,
+      "low_memory": 0,
+      "near_lossless": 100,
+      "use_delta_palette": 0,
+      "use_sharp_yuv": 0
+    },
+    "avif": {
+      "quality": 50,
+      "qualityAlpha": -1,
+      "denoiseLevel": 0,
+      "tileColsLog2": 0,
+      "tileRowsLog2": 0,
+      "speed": 6,
+      "subsample": 1,
+      "chromaDeltaQ": false,
+      "sharpness": 0,
+      "tune": 0,
+      "enableSharpYUV": false,
+      "bitDepth": 8,
+      "lossless": false
+    },
+    "jxl": {
+      "effort": 7,
+      "quality": 75,
+      "progressive": false,
+      "epf": -1,
+      "lossyPalette": false,
+      "decodingSpeedTier": 0,
+      "photonNoiseIso": 0,
+      "lossyModular": false,
+      "lossless": false
+    },
+    "oxipng": {
+      "level": 2,
+      "interlace": false,
+      "optimiseAlpha": true
+    }
+  },
+  "summary": [
+    {
+      "codec": "mozjpeg",
+      "status": "ok",
+      "images": 25,
+      "medianOutputBytes": 49904,
+      "medianBpp": 0.906,
+      "medianRatio": 13.154,
+      "medianSsimulacra2": 72.04,
+      "pixelIdenticalCount": null,
+      "medianEncodeMs": 36.2,
+      "totalOutputBytes": 1413218,
+      "totalSourceBytes": 18804994,
+      "error": null
+    },
+    {
+      "codec": "webp",
+      "status": "ok",
+      "images": 25,
+      "medianOutputBytes": 46574,
+      "medianBpp": 0.802,
+      "medianRatio": 14.417,
+      "medianSsimulacra2": 69.18,
+      "pixelIdenticalCount": null,
+      "medianEncodeMs": 29.8,
+      "totalOutputBytes": 1258088,
+      "totalSourceBytes": 18804994,
+      "error": null
+    },
+    {
+      "codec": "avif",
+      "status": "ok",
+      "images": 25,
+      "medianOutputBytes": 27944,
+      "medianBpp": 0.506,
+      "medianRatio": 24.029,
+      "medianSsimulacra2": 62.14,
+      "pixelIdenticalCount": null,
+      "medianEncodeMs": 346.3,
+      "totalOutputBytes": 834002,
+      "totalSourceBytes": 18804994,
+      "error": null
+    },
+    {
+      "codec": "jxl",
+      "status": "ok",
+      "images": 25,
+      "medianOutputBytes": 41529,
+      "medianBpp": 0.796,
+      "medianRatio": 14.827,
+      "medianSsimulacra2": 72.3,
+      "pixelIdenticalCount": null,
+      "medianEncodeMs": 420.1,
+      "totalOutputBytes": 1211649,
+      "totalSourceBytes": 18804994,
+      "error": null
+    },
+    {
+      "codec": "oxipng",
+      "status": "ok",
+      "images": 25,
+      "medianOutputBytes": 603817,
+      "medianBpp": 12.136,
+      "medianRatio": 1.045,
+      "medianSsimulacra2": null,
+      "pixelIdenticalCount": 25,
+      "medianEncodeMs": 232,
+      "totalOutputBytes": 16434569,
+      "totalSourceBytes": 18804994,
+      "error": null
+    }
+  ],
+  "batch": {
+    "images": 25,
+    "codecs": [
+      "mozjpeg",
+      "webp",
+      "avif",
+      "jxl",
+      "oxipng"
+    ],
+    "outputs": 125,
+    "outputBytes": 21151526,
+    "wallMsTotal": 37229.1,
+    "wallMsInit": 79.3,
+    "wallMsEncodeLoop": 37149.8,
+    "encodeMsPerCodec": {
+      "mozjpeg": 1197.2,
+      "webp": 965.2,
+      "avif": 10908.1,
+      "jxl": 14014.3,
+      "oxipng": 9701.4
+    },
+    "rssAfterInitBytes": 102371328,
+    "peakRssSampledBytes": 867819520,
+    "peakRssOsBytes": 869552128,
+    "errors": []
+  },
+  "batchPerCodec": {
+    "mozjpeg": {
+      "images": 25,
+      "codecs": [
+        "mozjpeg"
+      ],
+      "outputs": 25,
+      "outputBytes": 1413218,
+      "wallMsTotal": 1378.9,
+      "wallMsInit": 38.7,
+      "wallMsEncodeLoop": 1340.2,
+      "encodeMsPerCodec": {
+        "mozjpeg": 1094.2
+      },
+      "rssAfterInitBytes": 86552576,
+      "peakRssSampledBytes": 204009472,
+      "peakRssOsBytes": 208715776,
+      "errors": []
+    },
+    "webp": {
+      "images": 25,
+      "codecs": [
+        "webp"
+      ],
+      "outputs": 25,
+      "outputBytes": 1258088,
+      "wallMsTotal": 1220.8,
+      "wallMsInit": 59.4,
+      "wallMsEncodeLoop": 1161.4,
+      "encodeMsPerCodec": {
+        "webp": 912.4
+      },
+      "rssAfterInitBytes": 86020096,
+      "peakRssSampledBytes": 187981824,
+      "peakRssOsBytes": 191762432,
+      "errors": []
+    },
+    "avif": {
+      "images": 25,
+      "codecs": [
+        "avif"
+      ],
+      "outputs": 25,
+      "outputBytes": 834002,
+      "wallMsTotal": 10700.6,
+      "wallMsInit": 48.3,
+      "wallMsEncodeLoop": 10652.3,
+      "encodeMsPerCodec": {
+        "avif": 10402.8
+      },
+      "rssAfterInitBytes": 98865152,
+      "peakRssSampledBytes": 240500736,
+      "peakRssOsBytes": 240504832,
+      "errors": []
+    },
+    "jxl": {
+      "images": 25,
+      "codecs": [
+        "jxl"
+      ],
+      "outputs": 25,
+      "outputBytes": 1211649,
+      "wallMsTotal": 13809.5,
+      "wallMsInit": 39.7,
+      "wallMsEncodeLoop": 13769.7,
+      "encodeMsPerCodec": {
+        "jxl": 13520.1
+      },
+      "rssAfterInitBytes": 92803072,
+      "peakRssSampledBytes": 599552000,
+      "peakRssOsBytes": 601264128,
+      "errors": []
+    },
+    "oxipng": {
+      "images": 25,
+      "codecs": [
+        "oxipng"
+      ],
+      "outputs": 25,
+      "outputBytes": 16434569,
+      "wallMsTotal": 10190.9,
+      "wallMsInit": 79.5,
+      "wallMsEncodeLoop": 10111.4,
+      "encodeMsPerCodec": {
+        "oxipng": 9860
+      },
+      "rssAfterInitBytes": 86130688,
+      "peakRssSampledBytes": 205815808,
+      "peakRssOsBytes": 205815808,
+      "errors": []
+    }
+  },
+  "failures": [],
+  "records": [
+    {
+      "image": "kodim01",
+      "codec": "mozjpeg",
+      "width": 768,
+      "height": 512,
+      "sourceHasAlpha": false,
+      "sourceBytes": 736501,
+      "encodeMsRuns": [
+        55.79,
+        48.18,
+        47.73
+      ],
+      "encodeMsMedian": 48.18,
+      "outputBytes": 72721,
+      "bpp": 1.4795,
+      "ratio": 10.1278,
+      "ssimulacra2": 71.8463,
+      "pixelIdentical": null,
+      "error": null
+    },
+    {
+      "image": "kodim01",
+      "codec": "webp",
+      "width": 768,
+      "height": 512,
+      "sourceHasAlpha": false,
+      "sourceBytes": 736501,
+      "encodeMsRuns": [
+        44.14,
+        35.99,
+        33.92
+      ],
+      "encodeMsMedian": 35.99,
+      "outputBytes": 77422,
+      "bpp": 1.5752,
+      "ratio": 9.5128,
+      "ssimulacra2": 72.7186,
+      "pixelIdentical": null,
+      "error": null
+    },
+    {
+      "image": "kodim01",
+      "codec": "avif",
+      "width": 768,
+      "height": 512,
+      "sourceHasAlpha": false,
+      "sourceBytes": 736501,
+      "encodeMsRuns": [
+        484.22,
+        419.14,
+        416.76
+      ],
+      "encodeMsMedian": 419.14,
+      "outputBytes": 56464,
+      "bpp": 1.1488,
+      "ratio": 13.0437,
+      "ssimulacra2": 64.0013,
+      "pixelIdentical": null,
+      "error": null
+    },
+    {
+      "image": "kodim01",
+      "codec": "jxl",
+      "width": 768,
+      "height": 512,
+      "sourceHasAlpha": false,
+      "sourceBytes": 736501,
+      "encodeMsRuns": [
+        487.26,
+        440.17,
+        440.65
+      ],
+      "encodeMsMedian": 440.65,
+      "outputBytes": 65851,
+      "bpp": 1.3397,
+      "ratio": 11.1844,
+      "ssimulacra2": 72.2779,
+      "pixelIdentical": null,
+      "error": null
+    },
+    {
+      "image": "kodim01",
+      "codec": "oxipng",
+      "width": 768,
+      "height": 512,
+      "sourceHasAlpha": false,
+      "sourceBytes": 736501,
+      "encodeMsRuns": [
+        225.07,
+        191.78,
+        191.31
+      ],
+      "encodeMsMedian": 191.78,
+      "outputBytes": 686574,
+      "bpp": 13.9684,
+      "ratio": 1.0727,
+      "ssimulacra2": null,
+      "pixelIdentical": true,
+      "error": null
+    },
+    {
+      "image": "kodim02",
+      "codec": "mozjpeg",
+      "width": 768,
+      "height": 512,
+      "sourceHasAlpha": false,
+      "sourceBytes": 617995,
+      "encodeMsRuns": [
+        30.95,
+        30.27,
+        30.11
+      ],
+      "encodeMsMedian": 30.27,
+      "outputBytes": 41362,
+      "bpp": 0.8415,
+      "ratio": 14.9411,
+      "ssimulacra2": 67.7322,
+      "pixelIdentical": null,
+      "error": null
+    },
+    {
+      "image": "kodim02",
+      "codec": "webp",
+      "width": 768,
+      "height": 512,
+      "sourceHasAlpha": false,
+      "sourceBytes": 617995,
+      "encodeMsRuns": [
+        28.64,
+        27.83,
+        27.78
+      ],
+      "encodeMsMedian": 27.83,
+      "outputBytes": 33988,
+      "bpp": 0.6915,
+      "ratio": 18.1827,
+      "ssimulacra2": 59.6408,
+      "pixelIdentical": null,
+      "error": null
+    },
+    {
+      "image": "kodim02",
+      "codec": "avif",
+      "width": 768,
+      "height": 512,
+      "sourceHasAlpha": false,
+      "sourceBytes": 617995,
+      "encodeMsRuns": [
+        329.26,
+        324.56,
+        324.85
+      ],
+      "encodeMsMedian": 324.85,
+      "outputBytes": 19601,
+      "bpp": 0.3988,
+      "ratio": 31.5287,
+      "ssimulacra2": 48.658,
+      "pixelIdentical": null,
+      "error": null
+    },
+    {
+      "image": "kodim02",
+      "codec": "jxl",
+      "width": 768,
+      "height": 512,
+      "sourceHasAlpha": false,
+      "sourceBytes": 617995,
+      "encodeMsRuns": [
+        390.65,
+        387.16,
+        387.75
+      ],
+      "encodeMsMedian": 387.75,
+      "outputBytes": 39111,
+      "bpp": 0.7957,
+      "ratio": 15.8011,
+      "ssimulacra2": 70.8859,
+      "pixelIdentical": null,
+      "error": null
+    },
+    {
+      "image": "kodim02",
+      "codec": "oxipng",
+      "width": 768,
+      "height": 512,
+      "sourceHasAlpha": false,
+      "sourceBytes": 617995,
+      "encodeMsRuns": [
+        232.53,
+        231.95,
+        231.77
+      ],
+      "encodeMsMedian": 231.95,
+      "outputBytes": 603817,
+      "bpp": 12.2847,
+      "ratio": 1.0235,
+      "ssimulacra2": null,
+      "pixelIdentical": true,
+      "error": null
+    },
+    {
+      "image": "kodim03",
+      "codec": "mozjpeg",
+      "width": 768,
+      "height": 512,
+      "sourceHasAlpha": false,
+      "sourceBytes": 502888,
+      "encodeMsRuns": [
+        33.29,
+        32.91,
+        32.74
+      ],
+      "encodeMsMedian": 32.91,
+      "outputBytes": 35337,
+      "bpp": 0.7189,
+      "ratio": 14.2312,
+      "ssimulacra2": 72.2722,
+      "pixelIdentical": null,
+      "error": null
+    },
+    {
+      "image": "kodim03",
+      "codec": "webp",
+      "width": 768,
+      "height": 512,
+      "sourceHasAlpha": false,
+      "sourceBytes": 502888,
+      "encodeMsRuns": [
+        27.26,
+        26.38,
+        26.08
+      ],
+      "encodeMsMedian": 26.38,
+      "outputBytes": 25558,
+      "bpp": 0.52,
+      "ratio": 19.6763,
+      "ssimulacra2": 67.5763,
+      "pixelIdentical": null,
+      "error": null
+    },
+    {
+      "image": "kodim03",
+      "codec": "avif",
+      "width": 768,
+      "height": 512,
+      "sourceHasAlpha": false,
+      "sourceBytes": 502888,
+      "encodeMsRuns": [
+        271.64,
+        267.42,
+        267.27
+      ],
+      "encodeMsMedian": 267.42,
+      "outputBytes": 15729,
+      "bpp": 0.32,
+      "ratio": 31.972,
+      "ssimulacra2": 60.7476,
+      "pixelIdentical": null,
+      "error": null
+    },
+    {
+      "image": "kodim03",
+      "codec": "jxl",
+      "width": 768,
+      "height": 512,
+      "sourceHasAlpha": false,
+      "sourceBytes": 502888,
+      "encodeMsRuns": [
+        389.54,
+        389.11,
+        396.62
+      ],
+      "encodeMsMedian": 389.54,
+      "outputBytes": 30571,
+      "bpp": 0.622,
+      "ratio": 16.4498,
+      "ssimulacra2": 74.4417,
+      "pixelIdentical": null,
+      "error": null
+    },
+    {
+      "image": "kodim03",
+      "codec": "oxipng",
+      "width": 768,
+      "height": 512,
+      "sourceHasAlpha": false,
+      "sourceBytes": 502888,
+      "encodeMsRuns": [
+        315.41,
+        319.34,
+        317.12
+      ],
+      "encodeMsMedian": 317.12,
+      "outputBytes": 480676,
+      "bpp": 9.7794,
+      "ratio": 1.0462,
+      "ssimulacra2": null,
+      "pixelIdentical": true,
+      "error": null
+    },
+    {
+      "image": "kodim04",
+      "codec": "mozjpeg",
+      "width": 512,
+      "height": 768,
+      "sourceHasAlpha": false,
+      "sourceBytes": 637432,
+      "encodeMsRuns": [
+        36.06,
+        35.68,
+        35.32
+      ],
+      "encodeMsMedian": 35.68,
+      "outputBytes": 44543,
+      "bpp": 0.9062,
+      "ratio": 14.3105,
+      "ssimulacra2": 70.556,
+      "pixelIdentical": null,
+      "error": null
+    },
+    {
+      "image": "kodim04",
+      "codec": "webp",
+      "width": 512,
+      "height": 768,
+      "sourceHasAlpha": false,
+      "sourceBytes": 637432,
+      "encodeMsRuns": [
+        29.24,
+        28.4,
+        28.32
+      ],
+      "encodeMsMedian": 28.4,
+      "outputBytes": 36742,
+      "bpp": 0.7475,
+      "ratio": 17.3489,
+      "ssimulacra2": 62.015,
+      "pixelIdentical": null,
+      "error": null
+    },
+    {
+      "image": "kodim04",
+      "codec": "avif",
+      "width": 512,
+      "height": 768,
+      "sourceHasAlpha": false,
+      "sourceBytes": 637432,
+      "encodeMsRuns": [
+        319.62,
+        318.2,
+        313.39
+      ],
+      "encodeMsMedian": 318.2,
+      "outputBytes": 22152,
+      "bpp": 0.4507,
+      "ratio": 28.7754,
+      "ssimulacra2": 55.8345,
+      "pixelIdentical": null,
+      "error": null
+    },
+    {
+      "image": "kodim04",
+      "codec": "jxl",
+      "width": 512,
+      "height": 768,
+      "sourceHasAlpha": false,
+      "sourceBytes": 637432,
+      "encodeMsRuns": [
+        385.51,
+        380.87,
+        383.14
+      ],
+      "encodeMsMedian": 383.14,
+      "outputBytes": 38162,
+      "bpp": 0.7764,
+      "ratio": 16.7033,
+      "ssimulacra2": 72.2362,
+      "pixelIdentical": null,
+      "error": null
+    },
+    {
+      "image": "kodim04",
+      "codec": "oxipng",
+      "width": 512,
+      "height": 768,
+      "sourceHasAlpha": false,
+      "sourceBytes": 637432,
+      "encodeMsRuns": [
+        223.67,
+        224.02,
+        222.7
+      ],
+      "encodeMsMedian": 223.67,
+      "outputBytes": 622195,
+      "bpp": 12.6586,
+      "ratio": 1.0245,
+      "ssimulacra2": null,
+      "pixelIdentical": true,
+      "error": null
+    },
+    {
+      "image": "kodim05",
+      "codec": "mozjpeg",
+      "width": 768,
+      "height": 512,
+      "sourceHasAlpha": false,
+      "sourceBytes": 785610,
+      "encodeMsRuns": [
+        52.31,
+        52.33,
+        52.12
+      ],
+      "encodeMsMedian": 52.31,
+      "outputBytes": 81951,
+      "bpp": 1.6673,
+      "ratio": 9.5863,
+      "ssimulacra2": 73.7943,
+      "pixelIdentical": null,
+      "error": null
+    },
+    {
+      "image": "kodim05",
+      "codec": "webp",
+      "width": 768,
+      "height": 512,
+      "sourceHasAlpha": false,
+      "sourceBytes": 785610,
+      "encodeMsRuns": [
+        35.77,
+        34.12,
+        34.12
+      ],
+      "encodeMsMedian": 34.12,
+      "outputBytes": 80714,
+      "bpp": 1.6421,
+      "ratio": 9.7333,
+      "ssimulacra2": 74.2532,
+      "pixelIdentical": null,
+      "error": null
+    },
+    {
+      "image": "kodim05",
+      "codec": "avif",
+      "width": 768,
+      "height": 512,
+      "sourceHasAlpha": false,
+      "sourceBytes": 785610,
+      "encodeMsRuns": [
+        481.16,
+        486.68,
+        483.61
+      ],
+      "encodeMsMedian": 483.61,
+      "outputBytes": 58642,
+      "bpp": 1.1931,
+      "ratio": 13.3967,
+      "ssimulacra2": 67.2351,
+      "pixelIdentical": null,
+      "error": null
+    },
+    {
+      "image": "kodim05",
+      "codec": "jxl",
+      "width": 768,
+      "height": 512,
+      "sourceHasAlpha": false,
+      "sourceBytes": 785610,
+      "encodeMsRuns": [
+        441.81,
+        440.1,
+        440.16
+      ],
+      "encodeMsMedian": 440.16,
+      "outputBytes": 72518,
+      "bpp": 1.4754,
+      "ratio": 10.8333,
+      "ssimulacra2": 74.1418,
+      "pixelIdentical": null,
+      "error": null
+    },
+    {
+      "image": "kodim05",
+      "codec": "oxipng",
+      "width": 768,
+      "height": 512,
+      "sourceHasAlpha": false,
+      "sourceBytes": 785610,
+      "encodeMsRuns": [
+        182.3,
+        181.09,
+        181.09
+      ],
+      "encodeMsMedian": 181.09,
+      "outputBytes": 755502,
+      "bpp": 15.3707,
+      "ratio": 1.0399,
+      "ssimulacra2": null,
+      "pixelIdentical": true,
+      "error": null
+    },
+    {
+      "image": "kodim06",
+      "codec": "mozjpeg",
+      "width": 768,
+      "height": 512,
+      "sourceHasAlpha": false,
+      "sourceBytes": 618959,
+      "encodeMsRuns": [
+        41.83,
+        41.05,
+        40.98
+      ],
+      "encodeMsMedian": 41.05,
+      "outputBytes": 58009,
+      "bpp": 1.1802,
+      "ratio": 10.6701,
+      "ssimulacra2": 70.9609,
+      "pixelIdentical": null,
+      "error": null
+    },
+    {
+      "image": "kodim06",
+      "codec": "webp",
+      "width": 768,
+      "height": 512,
+      "sourceHasAlpha": false,
+      "sourceBytes": 618959,
+      "encodeMsRuns": [
+        31.77,
+        30.92,
+        30.91
+      ],
+      "encodeMsMedian": 30.92,
+      "outputBytes": 58612,
+      "bpp": 1.1925,
+      "ratio": 10.5603,
+      "ssimulacra2": 69.1779,
+      "pixelIdentical": null,
+      "error": null
+    },
+    {
+      "image": "kodim06",
+      "codec": "avif",
+      "width": 768,
+      "height": 512,
+      "sourceHasAlpha": false,
+      "sourceBytes": 618959,
+      "encodeMsRuns": [
+        351.99,
+        349.66,
+        351.34
+      ],
+      "encodeMsMedian": 351.34,
+      "outputBytes": 40047,
+      "bpp": 0.8148,
+      "ratio": 15.4558,
+      "ssimulacra2": 58.8799,
+      "pixelIdentical": null,
+      "error": null
+    },
+    {
+      "image": "kodim06",
+      "codec": "jxl",
+      "width": 768,
+      "height": 512,
+      "sourceHasAlpha": false,
+      "sourceBytes": 618959,
+      "encodeMsRuns": [
+        447.27,
+        429.61,
+        430.74
+      ],
+      "encodeMsMedian": 430.74,
+      "outputBytes": 50856,
+      "bpp": 1.0347,
+      "ratio": 12.1708,
+      "ssimulacra2": 71.2358,
+      "pixelIdentical": null,
+      "error": null
+    },
+    {
+      "image": "kodim06",
+      "codec": "oxipng",
+      "width": 768,
+      "height": 512,
+      "sourceHasAlpha": false,
+      "sourceBytes": 618959,
+      "encodeMsRuns": [
+        226.58,
+        227,
+        230.06
+      ],
+      "encodeMsMedian": 227,
+      "outputBytes": 589396,
+      "bpp": 11.9913,
+      "ratio": 1.0502,
+      "ssimulacra2": null,
+      "pixelIdentical": true,
+      "error": null
+    },
+    {
+      "image": "kodim07",
+      "codec": "mozjpeg",
+      "width": 768,
+      "height": 512,
+      "sourceHasAlpha": false,
+      "sourceBytes": 566322,
+      "encodeMsRuns": [
+        35.21,
+        34.15,
+        34.12
+      ],
+      "encodeMsMedian": 34.15,
+      "outputBytes": 44111,
+      "bpp": 0.8974,
+      "ratio": 12.8386,
+      "ssimulacra2": 76.433,
+      "pixelIdentical": null,
+      "error": null
+    },
+    {
+      "image": "kodim07",
+      "codec": "webp",
+      "width": 768,
+      "height": 512,
+      "sourceHasAlpha": false,
+      "sourceBytes": 566322,
+      "encodeMsRuns": [
+        27.88,
+        27.1,
+        27.16
+      ],
+      "encodeMsMedian": 27.16,
+      "outputBytes": 32518,
+      "bpp": 0.6616,
+      "ratio": 17.4156,
+      "ssimulacra2": 72.1173,
+      "pixelIdentical": null,
+      "error": null
+    },
+    {
+      "image": "kodim07",
+      "codec": "avif",
+      "width": 768,
+      "height": 512,
+      "sourceHasAlpha": false,
+      "sourceBytes": 566322,
+      "encodeMsRuns": [
+        340.17,
+        337.44,
+        338.51
+      ],
+      "encodeMsMedian": 338.51,
+      "outputBytes": 22025,
+      "bpp": 0.4481,
+      "ratio": 25.7127,
+      "ssimulacra2": 67.7207,
+      "pixelIdentical": null,
+      "error": null
+    },
+    {
+      "image": "kodim07",
+      "codec": "jxl",
+      "width": 768,
+      "height": 512,
+      "sourceHasAlpha": false,
+      "sourceBytes": 566322,
+      "encodeMsRuns": [
+        410.35,
+        410.19,
+        407.41
+      ],
+      "encodeMsMedian": 410.19,
+      "outputBytes": 38196,
+      "bpp": 0.7771,
+      "ratio": 14.8267,
+      "ssimulacra2": 77.9382,
+      "pixelIdentical": null,
+      "error": null
+    },
+    {
+      "image": "kodim07",
+      "codec": "oxipng",
+      "width": 768,
+      "height": 512,
+      "sourceHasAlpha": false,
+      "sourceBytes": 566322,
+      "encodeMsRuns": [
+        299.08,
+        295.91,
+        298.62
+      ],
+      "encodeMsMedian": 298.62,
+      "outputBytes": 538025,
+      "bpp": 10.9461,
+      "ratio": 1.0526,
+      "ssimulacra2": null,
+      "pixelIdentical": true,
+      "error": null
+    },
+    {
+      "image": "kodim08",
+      "codec": "mozjpeg",
+      "width": 768,
+      "height": 512,
+      "sourceHasAlpha": false,
+      "sourceBytes": 788470,
+      "encodeMsRuns": [
+        55.96,
+        54.93,
+        54.86
+      ],
+      "encodeMsMedian": 54.93,
+      "outputBytes": 80975,
+      "bpp": 1.6474,
+      "ratio": 9.7372,
+      "ssimulacra2": 72.0727,
+      "pixelIdentical": null,
+      "error": null
+    },
+    {
+      "image": "kodim08",
+      "codec": "webp",
+      "width": 768,
+      "height": 512,
+      "sourceHasAlpha": false,
+      "sourceBytes": 788470,
+      "encodeMsRuns": [
+        35.55,
+        35.41,
+        35.86
+      ],
+      "encodeMsMedian": 35.55,
+      "outputBytes": 84274,
+      "bpp": 1.7146,
+      "ratio": 9.356,
+      "ssimulacra2": 74.509,
+      "pixelIdentical": null,
+      "error": null
+    },
+    {
+      "image": "kodim08",
+      "codec": "avif",
+      "width": 768,
+      "height": 512,
+      "sourceHasAlpha": false,
+      "sourceBytes": 788470,
+      "encodeMsRuns": [
+        492.84,
+        492.93,
+        493.89
+      ],
+      "encodeMsMedian": 492.93,
+      "outputBytes": 57664,
+      "bpp": 1.1732,
+      "ratio": 13.6735,
+      "ssimulacra2": 65.8516,
+      "pixelIdentical": null,
+      "error": null
+    },
+    {
+      "image": "kodim08",
+      "codec": "jxl",
+      "width": 768,
+      "height": 512,
+      "sourceHasAlpha": false,
+      "sourceBytes": 788470,
+      "encodeMsRuns": [
+        458.12,
+        456.21,
+        455.47
+      ],
+      "encodeMsMedian": 456.21,
+      "outputBytes": 70332,
+      "bpp": 1.4309,
+      "ratio": 11.2107,
+      "ssimulacra2": 72.5401,
+      "pixelIdentical": null,
+      "error": null
+    },
+    {
+      "image": "kodim08",
+      "codec": "oxipng",
+      "width": 768,
+      "height": 512,
+      "sourceHasAlpha": false,
+      "sourceBytes": 788470,
+      "encodeMsRuns": [
+        186.88,
+        186.13,
+        191.55
+      ],
+      "encodeMsMedian": 186.88,
+      "outputBytes": 745145,
+      "bpp": 15.16,
+      "ratio": 1.0581,
+      "ssimulacra2": null,
+      "pixelIdentical": true,
+      "error": null
+    },
+    {
+      "image": "kodim09",
+      "codec": "mozjpeg",
+      "width": 512,
+      "height": 768,
+      "sourceHasAlpha": false,
+      "sourceBytes": 582899,
+      "encodeMsRuns": [
+        29.21,
+        29.71,
+        28.14
+      ],
+      "encodeMsMedian": 29.21,
+      "outputBytes": 35162,
+      "bpp": 0.7154,
+      "ratio": 16.5775,
+      "ssimulacra2": 73.8982,
+      "pixelIdentical": null,
+      "error": null
+    },
+    {
+      "image": "kodim09",
+      "codec": "webp",
+      "width": 512,
+      "height": 768,
+      "sourceHasAlpha": false,
+      "sourceBytes": 582899,
+      "encodeMsRuns": [
+        27.28,
+        25.92,
+        26.21
+      ],
+      "encodeMsMedian": 26.21,
+      "outputBytes": 26332,
+      "bpp": 0.5357,
+      "ratio": 22.1365,
+      "ssimulacra2": 69.3433,
+      "pixelIdentical": null,
+      "error": null
+    },
+    {
+      "image": "kodim09",
+      "codec": "avif",
+      "width": 512,
+      "height": 768,
+      "sourceHasAlpha": false,
+      "sourceBytes": 582899,
+      "encodeMsRuns": [
+        280.92,
+        278.56,
+        280.64
+      ],
+      "encodeMsMedian": 280.64,
+      "outputBytes": 16868,
+      "bpp": 0.3432,
+      "ratio": 34.5565,
+      "ssimulacra2": 64.0982,
+      "pixelIdentical": null,
+      "error": null
+    },
+    {
+      "image": "kodim09",
+      "codec": "jxl",
+      "width": 512,
+      "height": 768,
+      "sourceHasAlpha": false,
+      "sourceBytes": 582899,
+      "encodeMsRuns": [
+        424.82,
+        415.05,
+        414.43
+      ],
+      "encodeMsMedian": 415.05,
+      "outputBytes": 30344,
+      "bpp": 0.6174,
+      "ratio": 19.2097,
+      "ssimulacra2": 75.3874,
+      "pixelIdentical": null,
+      "error": null
+    },
+    {
+      "image": "kodim09",
+      "codec": "oxipng",
+      "width": 512,
+      "height": 768,
+      "sourceHasAlpha": false,
+      "sourceBytes": 582899,
+      "encodeMsRuns": [
+        255.68,
+        253.1,
+        241.65
+      ],
+      "encodeMsMedian": 253.1,
+      "outputBytes": 556682,
+      "bpp": 11.3257,
+      "ratio": 1.0471,
+      "ssimulacra2": null,
+      "pixelIdentical": true,
+      "error": null
+    },
+    {
+      "image": "kodim10",
+      "codec": "mozjpeg",
+      "width": 512,
+      "height": 768,
+      "sourceHasAlpha": false,
+      "sourceBytes": 593463,
+      "encodeMsRuns": [
+        31.41,
+        32.02,
+        31.54
+      ],
+      "encodeMsMedian": 31.54,
+      "outputBytes": 40304,
+      "bpp": 0.82,
+      "ratio": 14.7247,
+      "ssimulacra2": 73.8467,
+      "pixelIdentical": null,
+      "error": null
+    },
+    {
+      "image": "kodim10",
+      "codec": "webp",
+      "width": 512,
+      "height": 768,
+      "sourceHasAlpha": false,
+      "sourceBytes": 593463,
+      "encodeMsRuns": [
+        28,
+        27.2,
+        28.95
+      ],
+      "encodeMsMedian": 28,
+      "outputBytes": 30848,
+      "bpp": 0.6276,
+      "ratio": 19.2383,
+      "ssimulacra2": 67.4721,
+      "pixelIdentical": null,
+      "error": null
+    },
+    {
+      "image": "kodim10",
+      "codec": "avif",
+      "width": 512,
+      "height": 768,
+      "sourceHasAlpha": false,
+      "sourceBytes": 593463,
+      "encodeMsRuns": [
+        335.51,
+        335.26,
+        340.85
+      ],
+      "encodeMsMedian": 335.51,
+      "outputBytes": 18729,
+      "bpp": 0.381,
+      "ratio": 31.6868,
+      "ssimulacra2": 62.1393,
+      "pixelIdentical": null,
+      "error": null
+    },
+    {
+      "image": "kodim10",
+      "codec": "jxl",
+      "width": 512,
+      "height": 768,
+      "sourceHasAlpha": false,
+      "sourceBytes": 593463,
+      "encodeMsRuns": [
+        429.34,
+        423.79,
+        421.32
+      ],
+      "encodeMsMedian": 423.79,
+      "outputBytes": 35161,
+      "bpp": 0.7154,
+      "ratio": 16.8784,
+      "ssimulacra2": 75.4009,
+      "pixelIdentical": null,
+      "error": null
+    },
+    {
+      "image": "kodim10",
+      "codec": "oxipng",
+      "width": 512,
+      "height": 768,
+      "sourceHasAlpha": false,
+      "sourceBytes": 593463,
+      "encodeMsRuns": [
+        255.52,
+        244.88,
+        246.68
+      ],
+      "encodeMsMedian": 246.68,
+      "outputBytes": 564275,
+      "bpp": 11.4802,
+      "ratio": 1.0517,
+      "ssimulacra2": null,
+      "pixelIdentical": true,
+      "error": null
+    },
+    {
+      "image": "kodim11",
+      "codec": "mozjpeg",
+      "width": 768,
+      "height": 512,
+      "sourceHasAlpha": false,
+      "sourceBytes": 621023,
+      "encodeMsRuns": [
+        42.94,
+        43.96,
+        40.39
+      ],
+      "encodeMsMedian": 42.94,
+      "outputBytes": 54158,
+      "bpp": 1.1018,
+      "ratio": 11.4669,
+      "ssimulacra2": 71.0142,
+      "pixelIdentical": null,
+      "error": null
+    },
+    {
+      "image": "kodim11",
+      "codec": "webp",
+      "width": 768,
+      "height": 512,
+      "sourceHasAlpha": false,
+      "sourceBytes": 621023,
+      "encodeMsRuns": [
+        31.08,
+        30.67,
+        30.27
+      ],
+      "encodeMsMedian": 30.67,
+      "outputBytes": 51516,
+      "bpp": 1.0481,
+      "ratio": 12.055,
+      "ssimulacra2": 68.1656,
+      "pixelIdentical": null,
+      "error": null
+    },
+    {
+      "image": "kodim11",
+      "codec": "avif",
+      "width": 768,
+      "height": 512,
+      "sourceHasAlpha": false,
+      "sourceBytes": 621023,
+      "encodeMsRuns": [
+        416.53,
+        378.29,
+        377.21
+      ],
+      "encodeMsMedian": 378.29,
+      "outputBytes": 33884,
+      "bpp": 0.6894,
+      "ratio": 18.3279,
+      "ssimulacra2": 58.3242,
+      "pixelIdentical": null,
+      "error": null
+    },
+    {
+      "image": "kodim11",
+      "codec": "jxl",
+      "width": 768,
+      "height": 512,
+      "sourceHasAlpha": false,
+      "sourceBytes": 621023,
+      "encodeMsRuns": [
+        428.34,
+        418.29,
+        415.38
+      ],
+      "encodeMsMedian": 418.29,
+      "outputBytes": 47833,
+      "bpp": 0.9732,
+      "ratio": 12.9831,
+      "ssimulacra2": 71.7384,
+      "pixelIdentical": null,
+      "error": null
+    },
+    {
+      "image": "kodim11",
+      "codec": "oxipng",
+      "width": 768,
+      "height": 512,
+      "sourceHasAlpha": false,
+      "sourceBytes": 621023,
+      "encodeMsRuns": [
+        246.37,
+        252.84,
+        249.07
+      ],
+      "encodeMsMedian": 249.07,
+      "outputBytes": 596502,
+      "bpp": 12.1359,
+      "ratio": 1.0411,
+      "ssimulacra2": null,
+      "pixelIdentical": true,
+      "error": null
+    },
+    {
+      "image": "kodim12",
+      "codec": "mozjpeg",
+      "width": 768,
+      "height": 512,
+      "sourceHasAlpha": false,
+      "sourceBytes": 531024,
+      "encodeMsRuns": [
+        30.44,
+        31.12,
+        29.66
+      ],
+      "encodeMsMedian": 30.44,
+      "outputBytes": 36588,
+      "bpp": 0.7444,
+      "ratio": 14.5136,
+      "ssimulacra2": 72.0394,
+      "pixelIdentical": null,
+      "error": null
+    },
+    {
+      "image": "kodim12",
+      "codec": "webp",
+      "width": 768,
+      "height": 512,
+      "sourceHasAlpha": false,
+      "sourceBytes": 531024,
+      "encodeMsRuns": [
+        27.91,
+        27.21,
+        27.72
+      ],
+      "encodeMsMedian": 27.72,
+      "outputBytes": 28976,
+      "bpp": 0.5895,
+      "ratio": 18.3263,
+      "ssimulacra2": 64.8474,
+      "pixelIdentical": null,
+      "error": null
+    },
+    {
+      "image": "kodim12",
+      "codec": "avif",
+      "width": 768,
+      "height": 512,
+      "sourceHasAlpha": false,
+      "sourceBytes": 531024,
+      "encodeMsRuns": [
+        277.38,
+        277.17,
+        278.29
+      ],
+      "encodeMsMedian": 277.38,
+      "outputBytes": 17002,
+      "bpp": 0.3459,
+      "ratio": 31.233,
+      "ssimulacra2": 55.7632,
+      "pixelIdentical": null,
+      "error": null
+    },
+    {
+      "image": "kodim12",
+      "codec": "jxl",
+      "width": 768,
+      "height": 512,
+      "sourceHasAlpha": false,
+      "sourceBytes": 531024,
+      "encodeMsRuns": [
+        422.71,
+        420.99,
+        415.83
+      ],
+      "encodeMsMedian": 420.99,
+      "outputBytes": 32055,
+      "bpp": 0.6522,
+      "ratio": 16.566,
+      "ssimulacra2": 72.2674,
+      "pixelIdentical": null,
+      "error": null
+    },
+    {
+      "image": "kodim12",
+      "codec": "oxipng",
+      "width": 768,
+      "height": 512,
+      "sourceHasAlpha": false,
+      "sourceBytes": 531024,
+      "encodeMsRuns": [
+        272.88,
+        282.25,
+        280.74
+      ],
+      "encodeMsMedian": 280.74,
+      "outputBytes": 508565,
+      "bpp": 10.3468,
+      "ratio": 1.0442,
+      "ssimulacra2": null,
+      "pixelIdentical": true,
+      "error": null
+    },
+    {
+      "image": "kodim13",
+      "codec": "mozjpeg",
+      "width": 768,
+      "height": 512,
+      "sourceHasAlpha": false,
+      "sourceBytes": 822712,
+      "encodeMsRuns": [
+        57.68,
+        57.68,
+        58.69
+      ],
+      "encodeMsMedian": 57.68,
+      "outputBytes": 88835,
+      "bpp": 1.8074,
+      "ratio": 9.2611,
+      "ssimulacra2": 69.9004,
+      "pixelIdentical": null,
+      "error": null
+    },
+    {
+      "image": "kodim13",
+      "codec": "webp",
+      "width": 768,
+      "height": 512,
+      "sourceHasAlpha": false,
+      "sourceBytes": 822712,
+      "encodeMsRuns": [
+        39.15,
+        37.57,
+        38.1
+      ],
+      "encodeMsMedian": 38.1,
+      "outputBytes": 107044,
+      "bpp": 2.1778,
+      "ratio": 7.6857,
+      "ssimulacra2": 73.1646,
+      "pixelIdentical": null,
+      "error": null
+    },
+    {
+      "image": "kodim13",
+      "codec": "avif",
+      "width": 768,
+      "height": 512,
+      "sourceHasAlpha": false,
+      "sourceBytes": 822712,
+      "encodeMsRuns": [
+        453.96,
+        447.46,
+        459.15
+      ],
+      "encodeMsMedian": 453.96,
+      "outputBytes": 81182,
+      "bpp": 1.6517,
+      "ratio": 10.1342,
+      "ssimulacra2": 64.4728,
+      "pixelIdentical": null,
+      "error": null
+    },
+    {
+      "image": "kodim13",
+      "codec": "jxl",
+      "width": 768,
+      "height": 512,
+      "sourceHasAlpha": false,
+      "sourceBytes": 822712,
+      "encodeMsRuns": [
+        472.03,
+        491.01,
+        472.23
+      ],
+      "encodeMsMedian": 472.23,
+      "outputBytes": 80153,
+      "bpp": 1.6307,
+      "ratio": 10.2643,
+      "ssimulacra2": 68.9779,
+      "pixelIdentical": null,
+      "error": null
+    },
+    {
+      "image": "kodim13",
+      "codec": "oxipng",
+      "width": 768,
+      "height": 512,
+      "sourceHasAlpha": false,
+      "sourceBytes": 822712,
+      "encodeMsRuns": [
+        163.96,
+        168.64,
+        165.72
+      ],
+      "encodeMsMedian": 165.72,
+      "outputBytes": 798827,
+      "bpp": 16.2522,
+      "ratio": 1.0299,
+      "ssimulacra2": null,
+      "pixelIdentical": true,
+      "error": null
+    },
+    {
+      "image": "kodim14",
+      "codec": "mozjpeg",
+      "width": 768,
+      "height": 512,
+      "sourceHasAlpha": false,
+      "sourceBytes": 692201,
+      "encodeMsRuns": [
+        44.67,
+        47.23,
+        45.17
+      ],
+      "encodeMsMedian": 45.17,
+      "outputBytes": 67308,
+      "bpp": 1.3694,
+      "ratio": 10.2841,
+      "ssimulacra2": 72.0768,
+      "pixelIdentical": null,
+      "error": null
+    },
+    {
+      "image": "kodim14",
+      "codec": "webp",
+      "width": 768,
+      "height": 512,
+      "sourceHasAlpha": false,
+      "sourceBytes": 692201,
+      "encodeMsRuns": [
+        33.79,
+        33.25,
+        33.8
+      ],
+      "encodeMsMedian": 33.79,
+      "outputBytes": 67054,
+      "bpp": 1.3642,
+      "ratio": 10.323,
+      "ssimulacra2": 71.4508,
+      "pixelIdentical": null,
+      "error": null
+    },
+    {
+      "image": "kodim14",
+      "codec": "avif",
+      "width": 768,
+      "height": 512,
+      "sourceHasAlpha": false,
+      "sourceBytes": 692201,
+      "encodeMsRuns": [
+        447.8,
+        447.94,
+        441.72
+      ],
+      "encodeMsMedian": 447.8,
+      "outputBytes": 46452,
+      "bpp": 0.9451,
+      "ratio": 14.9014,
+      "ssimulacra2": 62.6858,
+      "pixelIdentical": null,
+      "error": null
+    },
+    {
+      "image": "kodim14",
+      "codec": "jxl",
+      "width": 768,
+      "height": 512,
+      "sourceHasAlpha": false,
+      "sourceBytes": 692201,
+      "encodeMsRuns": [
+        451.77,
+        452.36,
+        446.58
+      ],
+      "encodeMsMedian": 451.77,
+      "outputBytes": 60860,
+      "bpp": 1.2382,
+      "ratio": 11.3737,
+      "ssimulacra2": 72.1504,
+      "pixelIdentical": null,
+      "error": null
+    },
+    {
+      "image": "kodim14",
+      "codec": "oxipng",
+      "width": 768,
+      "height": 512,
+      "sourceHasAlpha": false,
+      "sourceBytes": 692201,
+      "encodeMsRuns": [
+        198.23,
+        198.81,
+        196.72
+      ],
+      "encodeMsMedian": 198.23,
+      "outputBytes": 669846,
+      "bpp": 13.6281,
+      "ratio": 1.0334,
+      "ssimulacra2": null,
+      "pixelIdentical": true,
+      "error": null
+    },
+    {
+      "image": "kodim15",
+      "codec": "mozjpeg",
+      "width": 768,
+      "height": 512,
+      "sourceHasAlpha": false,
+      "sourceBytes": 612582,
+      "encodeMsRuns": [
+        30.52,
+        30.11,
+        30.23
+      ],
+      "encodeMsMedian": 30.23,
+      "outputBytes": 40490,
+      "bpp": 0.8238,
+      "ratio": 15.1292,
+      "ssimulacra2": 68.0404,
+      "pixelIdentical": null,
+      "error": null
+    },
+    {
+      "image": "kodim15",
+      "codec": "webp",
+      "width": 768,
+      "height": 512,
+      "sourceHasAlpha": false,
+      "sourceBytes": 612582,
+      "encodeMsRuns": [
+        28.09,
+        28.26,
+        27.53
+      ],
+      "encodeMsMedian": 28.09,
+      "outputBytes": 32878,
+      "bpp": 0.6689,
+      "ratio": 18.632,
+      "ssimulacra2": 61.5517,
+      "pixelIdentical": null,
+      "error": null
+    },
+    {
+      "image": "kodim15",
+      "codec": "avif",
+      "width": 768,
+      "height": 512,
+      "sourceHasAlpha": false,
+      "sourceBytes": 612582,
+      "encodeMsRuns": [
+        282.81,
+        282.47,
+        284.63
+      ],
+      "encodeMsMedian": 282.81,
+      "outputBytes": 20036,
+      "bpp": 0.4076,
+      "ratio": 30.5741,
+      "ssimulacra2": 56.3828,
+      "pixelIdentical": null,
+      "error": null
+    },
+    {
+      "image": "kodim15",
+      "codec": "jxl",
+      "width": 768,
+      "height": 512,
+      "sourceHasAlpha": false,
+      "sourceBytes": 612582,
+      "encodeMsRuns": [
+        409.38,
+        394.01,
+        404.3
+      ],
+      "encodeMsMedian": 404.3,
+      "outputBytes": 33716,
+      "bpp": 0.686,
+      "ratio": 18.1689,
+      "ssimulacra2": 72.3048,
+      "pixelIdentical": null,
+      "error": null
+    },
+    {
+      "image": "kodim15",
+      "codec": "oxipng",
+      "width": 768,
+      "height": 512,
+      "sourceHasAlpha": false,
+      "sourceBytes": 612582,
+      "encodeMsRuns": [
+        257.83,
+        254.96,
+        258.57
+      ],
+      "encodeMsMedian": 257.83,
+      "outputBytes": 587883,
+      "bpp": 11.9605,
+      "ratio": 1.042,
+      "ssimulacra2": null,
+      "pixelIdentical": true,
+      "error": null
+    },
+    {
+      "image": "kodim16",
+      "codec": "mozjpeg",
+      "width": 768,
+      "height": 512,
+      "sourceHasAlpha": false,
+      "sourceBytes": 534247,
+      "encodeMsRuns": [
+        39.71,
+        35.11,
+        34.62
+      ],
+      "encodeMsMedian": 35.11,
+      "outputBytes": 43643,
+      "bpp": 0.8879,
+      "ratio": 12.2413,
+      "ssimulacra2": 70.9101,
+      "pixelIdentical": null,
+      "error": null
+    },
+    {
+      "image": "kodim16",
+      "codec": "webp",
+      "width": 768,
+      "height": 512,
+      "sourceHasAlpha": false,
+      "sourceBytes": 534247,
+      "encodeMsRuns": [
+        29.77,
+        28.75,
+        28.54
+      ],
+      "encodeMsMedian": 28.75,
+      "outputBytes": 39426,
+      "bpp": 0.8021,
+      "ratio": 13.5506,
+      "ssimulacra2": 65.0393,
+      "pixelIdentical": null,
+      "error": null
+    },
+    {
+      "image": "kodim16",
+      "codec": "avif",
+      "width": 768,
+      "height": 512,
+      "sourceHasAlpha": false,
+      "sourceBytes": 534247,
+      "encodeMsRuns": [
+        314.15,
+        310.31,
+        314.18
+      ],
+      "encodeMsMedian": 314.15,
+      "outputBytes": 24851,
+      "bpp": 0.5056,
+      "ratio": 21.498,
+      "ssimulacra2": 56.5302,
+      "pixelIdentical": null,
+      "error": null
+    },
+    {
+      "image": "kodim16",
+      "codec": "jxl",
+      "width": 768,
+      "height": 512,
+      "sourceHasAlpha": false,
+      "sourceBytes": 534247,
+      "encodeMsRuns": [
+        423.17,
+        420.12,
+        417.67
+      ],
+      "encodeMsMedian": 420.12,
+      "outputBytes": 37736,
+      "bpp": 0.7677,
+      "ratio": 14.1575,
+      "ssimulacra2": 71.3695,
+      "pixelIdentical": null,
+      "error": null
+    },
+    {
+      "image": "kodim16",
+      "codec": "oxipng",
+      "width": 768,
+      "height": 512,
+      "sourceHasAlpha": false,
+      "sourceBytes": 534247,
+      "encodeMsRuns": [
+        275.18,
+        273.72,
+        276.15
+      ],
+      "encodeMsMedian": 275.18,
+      "outputBytes": 506998,
+      "bpp": 10.3149,
+      "ratio": 1.0537,
+      "ssimulacra2": null,
+      "pixelIdentical": true,
+      "error": null
+    },
+    {
+      "image": "kodim17",
+      "codec": "mozjpeg",
+      "width": 512,
+      "height": 768,
+      "sourceHasAlpha": false,
+      "sourceBytes": 602078,
+      "encodeMsRuns": [
+        33.25,
+        32.49,
+        32.54
+      ],
+      "encodeMsMedian": 32.54,
+      "outputBytes": 43318,
+      "bpp": 0.8813,
+      "ratio": 13.899,
+      "ssimulacra2": 73.7418,
+      "pixelIdentical": null,
+      "error": null
+    },
+    {
+      "image": "kodim17",
+      "codec": "webp",
+      "width": 512,
+      "height": 768,
+      "sourceHasAlpha": false,
+      "sourceBytes": 602078,
+      "encodeMsRuns": [
+        30.66,
+        28.31,
+        28.5
+      ],
+      "encodeMsMedian": 28.5,
+      "outputBytes": 35316,
+      "bpp": 0.7185,
+      "ratio": 17.0483,
+      "ssimulacra2": 68.6974,
+      "pixelIdentical": null,
+      "error": null
+    },
+    {
+      "image": "kodim17",
+      "codec": "avif",
+      "width": 512,
+      "height": 768,
+      "sourceHasAlpha": false,
+      "sourceBytes": 602078,
+      "encodeMsRuns": [
+        362.36,
+        346.15,
+        346.9
+      ],
+      "encodeMsMedian": 346.9,
+      "outputBytes": 23408,
+      "bpp": 0.4762,
+      "ratio": 25.721,
+      "ssimulacra2": 62.6392,
+      "pixelIdentical": null,
+      "error": null
+    },
+    {
+      "image": "kodim17",
+      "codec": "jxl",
+      "width": 512,
+      "height": 768,
+      "sourceHasAlpha": false,
+      "sourceBytes": 602078,
+      "encodeMsRuns": [
+        440.84,
+        425.59,
+        424.15
+      ],
+      "encodeMsMedian": 425.59,
+      "outputBytes": 38977,
+      "bpp": 0.793,
+      "ratio": 15.447,
+      "ssimulacra2": 73.836,
+      "pixelIdentical": null,
+      "error": null
+    },
+    {
+      "image": "kodim17",
+      "codec": "oxipng",
+      "width": 512,
+      "height": 768,
+      "sourceHasAlpha": false,
+      "sourceBytes": 602078,
+      "encodeMsRuns": [
+        250.46,
+        248.62,
+        244.08
+      ],
+      "encodeMsMedian": 248.62,
+      "outputBytes": 579137,
+      "bpp": 11.7826,
+      "ratio": 1.0396,
+      "ssimulacra2": null,
+      "pixelIdentical": true,
+      "error": null
+    },
+    {
+      "image": "kodim18",
+      "codec": "mozjpeg",
+      "width": 512,
+      "height": 768,
+      "sourceHasAlpha": false,
+      "sourceBytes": 780947,
+      "encodeMsRuns": [
+        43.59,
+        44.69,
+        43.13
+      ],
+      "encodeMsMedian": 43.59,
+      "outputBytes": 65395,
+      "bpp": 1.3305,
+      "ratio": 11.942,
+      "ssimulacra2": 70.3808,
+      "pixelIdentical": null,
+      "error": null
+    },
+    {
+      "image": "kodim18",
+      "codec": "webp",
+      "width": 512,
+      "height": 768,
+      "sourceHasAlpha": false,
+      "sourceBytes": 780947,
+      "encodeMsRuns": [
+        33.32,
+        32.37,
+        32.38
+      ],
+      "encodeMsMedian": 32.38,
+      "outputBytes": 67596,
+      "bpp": 1.3752,
+      "ratio": 11.5532,
+      "ssimulacra2": 69.8706,
+      "pixelIdentical": null,
+      "error": null
+    },
+    {
+      "image": "kodim18",
+      "codec": "avif",
+      "width": 512,
+      "height": 768,
+      "sourceHasAlpha": false,
+      "sourceBytes": 780947,
+      "encodeMsRuns": [
+        383.96,
+        382.51,
+        377.5
+      ],
+      "encodeMsMedian": 382.51,
+      "outputBytes": 44981,
+      "bpp": 0.9151,
+      "ratio": 17.3617,
+      "ssimulacra2": 59.7546,
+      "pixelIdentical": null,
+      "error": null
+    },
+    {
+      "image": "kodim18",
+      "codec": "jxl",
+      "width": 512,
+      "height": 768,
+      "sourceHasAlpha": false,
+      "sourceBytes": 780947,
+      "encodeMsRuns": [
+        422.85,
+        421.81,
+        425.05
+      ],
+      "encodeMsMedian": 422.85,
+      "outputBytes": 56904,
+      "bpp": 1.1577,
+      "ratio": 13.7239,
+      "ssimulacra2": 70.7121,
+      "pixelIdentical": null,
+      "error": null
+    },
+    {
+      "image": "kodim18",
+      "codec": "oxipng",
+      "width": 512,
+      "height": 768,
+      "sourceHasAlpha": false,
+      "sourceBytes": 780947,
+      "encodeMsRuns": [
+        179.28,
+        178.35,
+        179.37
+      ],
+      "encodeMsMedian": 179.28,
+      "outputBytes": 753610,
+      "bpp": 15.3322,
+      "ratio": 1.0363,
+      "ssimulacra2": null,
+      "pixelIdentical": true,
+      "error": null
+    },
+    {
+      "image": "kodim19",
+      "codec": "mozjpeg",
+      "width": 512,
+      "height": 768,
+      "sourceHasAlpha": false,
+      "sourceBytes": 671476,
+      "encodeMsRuns": [
+        42.68,
+        41.12,
+        41.65
+      ],
+      "encodeMsMedian": 41.65,
+      "outputBytes": 50097,
+      "bpp": 1.0192,
+      "ratio": 13.4035,
+      "ssimulacra2": 71.0734,
+      "pixelIdentical": null,
+      "error": null
+    },
+    {
+      "image": "kodim19",
+      "codec": "webp",
+      "width": 512,
+      "height": 768,
+      "sourceHasAlpha": false,
+      "sourceBytes": 671476,
+      "encodeMsRuns": [
+        30.42,
+        29.62,
+        30.03
+      ],
+      "encodeMsMedian": 30.03,
+      "outputBytes": 46574,
+      "bpp": 0.9476,
+      "ratio": 14.4174,
+      "ssimulacra2": 66.8966,
+      "pixelIdentical": null,
+      "error": null
+    },
+    {
+      "image": "kodim19",
+      "codec": "avif",
+      "width": 512,
+      "height": 768,
+      "sourceHasAlpha": false,
+      "sourceBytes": 671476,
+      "encodeMsRuns": [
+        316.7,
+        318.75,
+        323.34
+      ],
+      "encodeMsMedian": 318.75,
+      "outputBytes": 27944,
+      "bpp": 0.5685,
+      "ratio": 24.0293,
+      "ssimulacra2": 58.0563,
+      "pixelIdentical": null,
+      "error": null
+    },
+    {
+      "image": "kodim19",
+      "codec": "jxl",
+      "width": 512,
+      "height": 768,
+      "sourceHasAlpha": false,
+      "sourceBytes": 671476,
+      "encodeMsRuns": [
+        409.73,
+        408.23,
+        407.62
+      ],
+      "encodeMsMedian": 408.23,
+      "outputBytes": 41529,
+      "bpp": 0.8449,
+      "ratio": 16.1688,
+      "ssimulacra2": 70.5671,
+      "pixelIdentical": null,
+      "error": null
+    },
+    {
+      "image": "kodim19",
+      "codec": "oxipng",
+      "width": 512,
+      "height": 768,
+      "sourceHasAlpha": false,
+      "sourceBytes": 671476,
+      "encodeMsRuns": [
+        226.37,
+        224.05,
+        229.71
+      ],
+      "encodeMsMedian": 226.37,
+      "outputBytes": 636896,
+      "bpp": 12.9577,
+      "ratio": 1.0543,
+      "ssimulacra2": null,
+      "pixelIdentical": true,
+      "error": null
+    },
+    {
+      "image": "kodim20",
+      "codec": "mozjpeg",
+      "width": 768,
+      "height": 512,
+      "sourceHasAlpha": false,
+      "sourceBytes": 492462,
+      "encodeMsRuns": [
+        31.84,
+        31.06,
+        30.32
+      ],
+      "encodeMsMedian": 31.06,
+      "outputBytes": 34368,
+      "bpp": 0.6992,
+      "ratio": 14.3291,
+      "ssimulacra2": 73.5487,
+      "pixelIdentical": null,
+      "error": null
+    },
+    {
+      "image": "kodim20",
+      "codec": "webp",
+      "width": 768,
+      "height": 512,
+      "sourceHasAlpha": false,
+      "sourceBytes": 492462,
+      "encodeMsRuns": [
+        25.51,
+        24.75,
+        24.76
+      ],
+      "encodeMsMedian": 24.76,
+      "outputBytes": 28586,
+      "bpp": 0.5816,
+      "ratio": 17.2274,
+      "ssimulacra2": 69.259,
+      "pixelIdentical": null,
+      "error": null
+    },
+    {
+      "image": "kodim20",
+      "codec": "avif",
+      "width": 768,
+      "height": 512,
+      "sourceHasAlpha": false,
+      "sourceBytes": 492462,
+      "encodeMsRuns": [
+        421.77,
+        408.14,
+        411.71
+      ],
+      "encodeMsMedian": 411.71,
+      "outputBytes": 18904,
+      "bpp": 0.3846,
+      "ratio": 26.0507,
+      "ssimulacra2": 66.005,
+      "pixelIdentical": null,
+      "error": null
+    },
+    {
+      "image": "kodim20",
+      "codec": "jxl",
+      "width": 768,
+      "height": 512,
+      "sourceHasAlpha": false,
+      "sourceBytes": 492462,
+      "encodeMsRuns": [
+        410.69,
+        409.58,
+        408.09
+      ],
+      "encodeMsMedian": 409.58,
+      "outputBytes": 29864,
+      "bpp": 0.6076,
+      "ratio": 16.4902,
+      "ssimulacra2": 74.3023,
+      "pixelIdentical": null,
+      "error": null
+    },
+    {
+      "image": "kodim20",
+      "codec": "oxipng",
+      "width": 768,
+      "height": 512,
+      "sourceHasAlpha": false,
+      "sourceBytes": 492462,
+      "encodeMsRuns": [
+        265.26,
+        264,
+        264.56
+      ],
+      "encodeMsMedian": 264.56,
+      "outputBytes": 471294,
+      "bpp": 9.5885,
+      "ratio": 1.0449,
+      "ssimulacra2": null,
+      "pixelIdentical": true,
+      "error": null
+    },
+    {
+      "image": "kodim21",
+      "codec": "mozjpeg",
+      "width": 768,
+      "height": 512,
+      "sourceHasAlpha": false,
+      "sourceBytes": 637051,
+      "encodeMsRuns": [
+        38.88,
+        38.13,
+        38.29
+      ],
+      "encodeMsMedian": 38.29,
+      "outputBytes": 49904,
+      "bpp": 1.0153,
+      "ratio": 12.7655,
+      "ssimulacra2": 72.8493,
+      "pixelIdentical": null,
+      "error": null
+    },
+    {
+      "image": "kodim21",
+      "codec": "webp",
+      "width": 768,
+      "height": 512,
+      "sourceHasAlpha": false,
+      "sourceBytes": 637051,
+      "encodeMsRuns": [
+        29.82,
+        30.59,
+        29.63
+      ],
+      "encodeMsMedian": 29.82,
+      "outputBytes": 48128,
+      "bpp": 0.9792,
+      "ratio": 13.2366,
+      "ssimulacra2": 70.7695,
+      "pixelIdentical": null,
+      "error": null
+    },
+    {
+      "image": "kodim21",
+      "codec": "avif",
+      "width": 768,
+      "height": 512,
+      "sourceHasAlpha": false,
+      "sourceBytes": 637051,
+      "encodeMsRuns": [
+        304.05,
+        301.28,
+        302.98
+      ],
+      "encodeMsMedian": 302.98,
+      "outputBytes": 34822,
+      "bpp": 0.7085,
+      "ratio": 18.2945,
+      "ssimulacra2": 63.6103,
+      "pixelIdentical": null,
+      "error": null
+    },
+    {
+      "image": "kodim21",
+      "codec": "jxl",
+      "width": 768,
+      "height": 512,
+      "sourceHasAlpha": false,
+      "sourceBytes": 637051,
+      "encodeMsRuns": [
+        404.57,
+        406.29,
+        406.59
+      ],
+      "encodeMsMedian": 406.29,
+      "outputBytes": 44223,
+      "bpp": 0.8997,
+      "ratio": 14.4054,
+      "ssimulacra2": 74.0375,
+      "pixelIdentical": null,
+      "error": null
+    },
+    {
+      "image": "kodim21",
+      "codec": "oxipng",
+      "width": 768,
+      "height": 512,
+      "sourceHasAlpha": false,
+      "sourceBytes": 637051,
+      "encodeMsRuns": [
+        224.72,
+        227.54,
+        226.72
+      ],
+      "encodeMsMedian": 226.72,
+      "outputBytes": 609250,
+      "bpp": 12.3952,
+      "ratio": 1.0456,
+      "ssimulacra2": null,
+      "pixelIdentical": true,
+      "error": null
+    },
+    {
+      "image": "kodim22",
+      "codec": "mozjpeg",
+      "width": 768,
+      "height": 512,
+      "sourceHasAlpha": false,
+      "sourceBytes": 701970,
+      "encodeMsRuns": [
+        36.23,
+        36.17,
+        35.39
+      ],
+      "encodeMsMedian": 36.17,
+      "outputBytes": 53367,
+      "bpp": 1.0858,
+      "ratio": 13.1536,
+      "ssimulacra2": 71.5668,
+      "pixelIdentical": null,
+      "error": null
+    },
+    {
+      "image": "kodim22",
+      "codec": "webp",
+      "width": 768,
+      "height": 512,
+      "sourceHasAlpha": false,
+      "sourceBytes": 701970,
+      "encodeMsRuns": [
+        31.14,
+        30.07,
+        30.69
+      ],
+      "encodeMsMedian": 30.69,
+      "outputBytes": 50246,
+      "bpp": 1.0223,
+      "ratio": 13.9707,
+      "ssimulacra2": 67.179,
+      "pixelIdentical": null,
+      "error": null
+    },
+    {
+      "image": "kodim22",
+      "codec": "avif",
+      "width": 768,
+      "height": 512,
+      "sourceHasAlpha": false,
+      "sourceBytes": 701970,
+      "encodeMsRuns": [
+        344.66,
+        346.26,
+        346.92
+      ],
+      "encodeMsMedian": 346.26,
+      "outputBytes": 32268,
+      "bpp": 0.6565,
+      "ratio": 21.7544,
+      "ssimulacra2": 58.7347,
+      "pixelIdentical": null,
+      "error": null
+    },
+    {
+      "image": "kodim22",
+      "codec": "jxl",
+      "width": 768,
+      "height": 512,
+      "sourceHasAlpha": false,
+      "sourceBytes": 701970,
+      "encodeMsRuns": [
+        401.5,
+        397.76,
+        400.3
+      ],
+      "encodeMsMedian": 400.3,
+      "outputBytes": 47962,
+      "bpp": 0.9758,
+      "ratio": 14.636,
+      "ssimulacra2": 71.6398,
+      "pixelIdentical": null,
+      "error": null
+    },
+    {
+      "image": "kodim22",
+      "codec": "oxipng",
+      "width": 768,
+      "height": 512,
+      "sourceHasAlpha": false,
+      "sourceBytes": 701970,
+      "encodeMsRuns": [
+        195.66,
+        197.63,
+        192.42
+      ],
+      "encodeMsMedian": 195.66,
+      "outputBytes": 685247,
+      "bpp": 13.9414,
+      "ratio": 1.0244,
+      "ssimulacra2": null,
+      "pixelIdentical": true,
+      "error": null
+    },
+    {
+      "image": "kodim23",
+      "codec": "mozjpeg",
+      "width": 768,
+      "height": 512,
+      "sourceHasAlpha": false,
+      "sourceBytes": 557596,
+      "encodeMsRuns": [
+        29.71,
+        28,
+        28.13
+      ],
+      "encodeMsMedian": 28.13,
+      "outputBytes": 33258,
+      "bpp": 0.6766,
+      "ratio": 16.7658,
+      "ssimulacra2": 75.2743,
+      "pixelIdentical": null,
+      "error": null
+    },
+    {
+      "image": "kodim23",
+      "codec": "webp",
+      "width": 768,
+      "height": 512,
+      "sourceHasAlpha": false,
+      "sourceBytes": 557596,
+      "encodeMsRuns": [
+        26.48,
+        26.11,
+        26.42
+      ],
+      "encodeMsMedian": 26.42,
+      "outputBytes": 23544,
+      "bpp": 0.479,
+      "ratio": 23.6831,
+      "ssimulacra2": 67.8356,
+      "pixelIdentical": null,
+      "error": null
+    },
+    {
+      "image": "kodim23",
+      "codec": "avif",
+      "width": 768,
+      "height": 512,
+      "sourceHasAlpha": false,
+      "sourceBytes": 557596,
+      "encodeMsRuns": [
+        255.52,
+        256.23,
+        253.66
+      ],
+      "encodeMsMedian": 255.52,
+      "outputBytes": 13360,
+      "bpp": 0.2718,
+      "ratio": 41.7362,
+      "ssimulacra2": 62.0358,
+      "pixelIdentical": null,
+      "error": null
+    },
+    {
+      "image": "kodim23",
+      "codec": "jxl",
+      "width": 768,
+      "height": 512,
+      "sourceHasAlpha": false,
+      "sourceBytes": 557596,
+      "encodeMsRuns": [
+        395.58,
+        398.15,
+        391.55
+      ],
+      "encodeMsMedian": 395.58,
+      "outputBytes": 25928,
+      "bpp": 0.5275,
+      "ratio": 21.5056,
+      "ssimulacra2": 77.319,
+      "pixelIdentical": null,
+      "error": null
+    },
+    {
+      "image": "kodim23",
+      "codec": "oxipng",
+      "width": 768,
+      "height": 512,
+      "sourceHasAlpha": false,
+      "sourceBytes": 557596,
+      "encodeMsRuns": [
+        262.74,
+        266.43,
+        262.51
+      ],
+      "encodeMsMedian": 262.74,
+      "outputBytes": 547283,
+      "bpp": 11.1345,
+      "ratio": 1.0188,
+      "ssimulacra2": null,
+      "pixelIdentical": true,
+      "error": null
+    },
+    {
+      "image": "kodim24",
+      "codec": "mozjpeg",
+      "width": 768,
+      "height": 512,
+      "sourceHasAlpha": false,
+      "sourceBytes": 706397,
+      "encodeMsRuns": [
+        45.24,
+        43.78,
+        45.19
+      ],
+      "encodeMsMedian": 45.19,
+      "outputBytes": 64322,
+      "bpp": 1.3086,
+      "ratio": 10.9822,
+      "ssimulacra2": 71.6789,
+      "pixelIdentical": null,
+      "error": null
+    },
+    {
+      "image": "kodim24",
+      "codec": "webp",
+      "width": 768,
+      "height": 512,
+      "sourceHasAlpha": false,
+      "sourceBytes": 706397,
+      "encodeMsRuns": [
+        33.64,
+        32.2,
+        32.03
+      ],
+      "encodeMsMedian": 32.2,
+      "outputBytes": 63854,
+      "bpp": 1.2991,
+      "ratio": 11.0627,
+      "ssimulacra2": 70.6423,
+      "pixelIdentical": null,
+      "error": null
+    },
+    {
+      "image": "kodim24",
+      "codec": "avif",
+      "width": 768,
+      "height": 512,
+      "sourceHasAlpha": false,
+      "sourceBytes": 706397,
+      "encodeMsRuns": [
+        409.06,
+        411.59,
+        413.46
+      ],
+      "encodeMsMedian": 411.59,
+      "outputBytes": 45990,
+      "bpp": 0.9357,
+      "ratio": 15.3598,
+      "ssimulacra2": 64.0591,
+      "pixelIdentical": null,
+      "error": null
+    },
+    {
+      "image": "kodim24",
+      "codec": "jxl",
+      "width": 768,
+      "height": 512,
+      "sourceHasAlpha": false,
+      "sourceBytes": 706397,
+      "encodeMsRuns": [
+        449.49,
+        444.2,
+        444.4
+      ],
+      "encodeMsMedian": 444.4,
+      "outputBytes": 59779,
+      "bpp": 1.2162,
+      "ratio": 11.8168,
+      "ssimulacra2": 74.0358,
+      "pixelIdentical": null,
+      "error": null
+    },
+    {
+      "image": "kodim24",
+      "codec": "oxipng",
+      "width": 768,
+      "height": 512,
+      "sourceHasAlpha": false,
+      "sourceBytes": 706397,
+      "encodeMsRuns": [
+        230.7,
+        233.38,
+        229.36
+      ],
+      "encodeMsMedian": 230.7,
+      "outputBytes": 674392,
+      "bpp": 13.7205,
+      "ratio": 1.0475,
+      "ssimulacra2": null,
+      "pixelIdentical": true,
+      "error": null
+    },
+    {
+      "image": "example",
+      "codec": "mozjpeg",
+      "width": 2558,
+      "height": 1348,
+      "sourceHasAlpha": false,
+      "sourceBytes": 3410689,
+      "encodeMsRuns": [
+        172,
+        170.33,
+        169.92
+      ],
+      "encodeMsMedian": 170.33,
+      "outputBytes": 153692,
+      "bpp": 0.3566,
+      "ratio": 22.1917,
+      "ssimulacra2": 81.1439,
+      "pixelIdentical": null,
+      "error": null
+    },
+    {
+      "image": "example",
+      "codec": "webp",
+      "width": 2558,
+      "height": 1348,
+      "sourceHasAlpha": false,
+      "sourceBytes": 3410689,
+      "encodeMsRuns": [
+        187.79,
+        183.53,
+        184.93
+      ],
+      "encodeMsMedian": 184.93,
+      "outputBytes": 80342,
+      "bpp": 0.1864,
+      "ratio": 42.4521,
+      "ssimulacra2": 74.0656,
+      "pixelIdentical": null,
+      "error": null
+    },
+    {
+      "image": "example",
+      "codec": "avif",
+      "width": 2558,
+      "height": 1348,
+      "sourceHasAlpha": false,
+      "sourceBytes": 3410689,
+      "encodeMsRuns": [
+        1962.28,
+        1998.1,
+        1905.55
+      ],
+      "encodeMsMedian": 1962.28,
+      "outputBytes": 40997,
+      "bpp": 0.0951,
+      "ratio": 83.1936,
+      "ssimulacra2": 69.5525,
+      "pixelIdentical": null,
+      "error": null
+    },
+    {
+      "image": "example",
+      "codec": "jxl",
+      "width": 2558,
+      "height": 1348,
+      "sourceHasAlpha": false,
+      "sourceBytes": 3410689,
+      "encodeMsRuns": [
+        3419.19,
+        3346.32,
+        3360.67
+      ],
+      "encodeMsMedian": 3360.67,
+      "outputBytes": 103028,
+      "bpp": 0.239,
+      "ratio": 33.1045,
+      "ssimulacra2": 82.3727,
+      "pixelIdentical": null,
+      "error": null
+    },
+    {
+      "image": "example",
+      "codec": "oxipng",
+      "width": 2558,
+      "height": 1348,
+      "sourceHasAlpha": false,
+      "sourceBytes": 3410689,
+      "encodeMsRuns": [
+        3870.9,
+        4119.81,
+        4046.04
+      ],
+      "encodeMsMedian": 4046.04,
+      "outputBytes": 1666552,
+      "bpp": 3.8665,
+      "ratio": 2.0466,
+      "ssimulacra2": null,
+      "pixelIdentical": true,
+      "error": null
+    }
+  ]
+}

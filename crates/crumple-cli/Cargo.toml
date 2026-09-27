@@ -1,0 +1,15 @@
+[package]
+name = "crumple-cli"
+description = "Command-line interface for Crumple, a local-first batch image optimizer (pre-alpha)."
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+repository.workspace = true
+
+[[bin]]
+name = "crumple"
+path = "src/main.rs"
+
+[dependencies]
+clap = { version = "4", features = ["derive"] }
+crumple-core = { path = "../crumple-core" }
