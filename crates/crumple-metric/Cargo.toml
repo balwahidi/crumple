@@ -1,0 +1,14 @@
+[package]
+publish = false
+name = "crumple-metric"
+version.workspace = true
+edition.workspace = true
+repository.workspace = true
+license = "Apache-2.0 AND BSD-2-Clause"
+description = "SSIMULACRA2 with a cached reference, ported from the ssimulacra2 crate"
+
+[dependencies]
+ssimulacra2 = { version = "=0.5.1", default-features = false }
+
+[dev-dependencies]
+png = "=0.18.1"

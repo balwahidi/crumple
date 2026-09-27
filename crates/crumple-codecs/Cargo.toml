@@ -1,0 +1,33 @@
+[package]
+publish = false
+name = "crumple-codecs"
+description = "Encoders and decoders for Crumple, a local-first batch image optimizer (pre-alpha)."
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+repository.workspace = true
+
+[features]
+default = ["jpeg", "webp", "avif", "png"]
+jpeg = ["dep:mozjpeg", "dep:zune-jpeg"]
+webp = ["dep:libwebp-sys", "dep:image-webp"]
+avif = ["dep:ravif", "dep:avif-decode", "dep:avif-parse"]
+png = ["dep:oxipng", "dep:png"]
+
+[dependencies]
+mozjpeg = { version = "=0.10.13", optional = true }
+libwebp-sys = { version = "=0.14.4", optional = true }
+ravif = { version = "=0.13.0", default-features = false, features = ["asm", "threading"], optional = true }
+avif-decode = { version = "=3.0.0", default-features = false, optional = true }
+# [Reviewer] Already in the graph via avif-decode; read directly for the pixel-limit check.
+avif-parse = { version = "=2.1.0", optional = true }
+oxipng = { version = "=10.2.1", default-features = false, features = ["parallel"], optional = true }
+png = { version = "=0.18.1", optional = true }
+zune-jpeg = { version = "=0.5.15", optional = true }
+image-webp = { version = "=0.2.4", optional = true }
+kamadak-exif = "=0.6.1"
+imgref = "1"
+rgb = "0.8"
+
+[dev-dependencies]
+ssimulacra2 = { version = "=0.5.1", default-features = false }

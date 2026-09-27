@@ -7,3 +7,10 @@ version = "0.0.0"
 edition = "2021"
 license = "Apache-2.0"
 repository = "https://github.com/balwahidi/crumple"
+
+# Image codecs and metrics are unusably slow unoptimized; keep our own crates debuggable.
+[profile.dev.package."*"]
+opt-level = 3
+# The metric's ported hot loops live in our own crate, so optimize it too.
+[profile.dev.package.crumple-metric]
+opt-level = 3

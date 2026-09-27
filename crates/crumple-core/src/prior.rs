@@ -1,0 +1,53 @@
+//! Initial-q prior (ARCHITECTURE §4.1).
+
+/// Lossy codec kinds searched by the planner.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub enum CodecKind {
+    Jpeg,
+    Webp,
+    Avif,
+}
+
+/// Linear interpolation over the fitted table at targets 70/80/90, extrapolating
+/// with the edge slope, rounded and clamped to 1..=100.
+pub fn prior_q(kind: CodecKind, target: f64) -> u8 {
+    let (a, b, c) = match kind {
+        CodecKind::Jpeg => (73.0, 87.0, 98.0),
+        CodecKind::Webp => (69.0, 83.0, 96.0),
+        CodecKind::Avif => (78.0, 86.0, 94.0),
+    };
+    let q: f64 = if target <= 80.0 {
+        a + (target - 70.0) * (b - a) / 10.0
+    } else {
+        b + (target - 80.0) * (c - b) / 10.0
+    };
+    if q.is_nan() {
+        return 1;
+    }
+    q.round().clamp(1.0, 100.0) as u8
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn table_values_and_clamp() {
+        let t = [
+            (CodecKind::Jpeg, [73, 87, 98]),
+            (CodecKind::Webp, [69, 83, 96]),
+            (CodecKind::Avif, [78, 86, 94]),
+        ];
+        for (k, v) in t {
+            assert_eq!(prior_q(k, 70.0), v[0]);
+            assert_eq!(prior_q(k, 80.0), v[1]);
+            assert_eq!(prior_q(k, 90.0), v[2]);
+            assert_eq!(prior_q(k, 1000.0), 100);
+            assert_eq!(prior_q(k, -1000.0), 1);
+        }
+        assert_eq!(prior_q(CodecKind::Jpeg, 75.0), 80);
+        assert_eq!(prior_q(CodecKind::Jpeg, 60.0), 59);
+        assert_eq!(prior_q(CodecKind::Jpeg, 95.0), 100);
+        assert_eq!(prior_q(CodecKind::Avif, 95.0), 98);
+    }
+}

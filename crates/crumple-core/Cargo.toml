@@ -1,4 +1,5 @@
 [package]
+publish = false
 name = "crumple-core"
 description = "Core library for Crumple, a local-first batch image optimizer (pre-alpha)."
 version.workspace = true
@@ -7,3 +8,4 @@ license.workspace = true
 repository.workspace = true
 
 [dependencies]
+fast_image_resize = "=6.1.0"

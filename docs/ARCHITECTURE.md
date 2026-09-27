@@ -84,6 +84,8 @@ The following rules apply to images with an alpha channel, ICC profiles, EXIF da
   - The metric scores composites over black and over white and returns the **minimum** of the two. SSIMULACRA2 itself is RGB-only.
 - **ICC profile.**
   - The profile is carried into JPEG (`write_icc_profile`), WebP (the libwebp mux `ICCP` chunk) and PNG (oxipng `add_icc_profile`).
+    - [Reviewer] JPEG does not use `write_icc_profile`: mozjpeg 0.10.13 numbers the APP2 chunks from 0, and zune-jpeg (like the ICC spec) needs 1-based numbers, so the profile would be lost on decode. T2 writes the APP2 markers itself (TODO in the code to switch back once ImageOptim/mozjpeg-rust#56 ships).
+    - [Reviewer] `decode` drops a profile whose header names a non-RGB colour space (GRAY, CMYK, …), because it always returns RGB pixels. Embedding a grayscale or CMYK profile in an RGB output is invalid, and CMYK profiles are often over 500 KB. An empty profile counts as none, in `encode` and `decode`.
   - AVIF is skipped when a profile is present, because `ravif` 0.13 has no ICC API.
   - The metric runs on raw sRGB-assumed values, a known approximation for wide-gamut images.
 - **EXIF.** Orientation is applied to the pixels. All other metadata is stripped in Phase 2.
@@ -125,6 +127,21 @@ Config (defaults): `step = 8`, `max_evals = 6`, `score_slack = 0.5`.
      - otherwise **Unreachable**.
    - When `evals == max_evals`, the same three outcomes, in the same order.
 5. **Result**: the passing candidate with the **fewest bytes** (ties go to the lower `q`), not simply `hi`. This keeps the result correct if the curve is not monotonic.
+
+**Precise rules** [Reviewer]. These settle the points steps 1–5 leave open; `planner.rs` implements exactly this.
+
+- **When the stop rules run.** After every completed eval: after a scored encode, and after an encode that was too big. They never run before the first encode, so the first step is always `Encode(q0)`.
+- **"Passes"** means `score ≥ target`. A NaN score counts as a failure.
+- **`hi − lo ≤ 1` is signed.** On a non-monotone curve a failure can sit above a pass (`lo > hi`); that also stops, with the fewest-bytes pass.
+- **Rounding.** The interpolated offset rounds half away from zero (`f64::round`; it is always positive). The midpoint `(lo+hi)/2` rounds down.
+- **Same-side safeguard.** Every pick made while both `lo` and `hi` exist counts, including a safeguard midpoint. Its side is whether it passed. If the last two such picks landed on the same side, the next pick is the midpoint. A pick that turned out too big records no side. Counting midpoints means a midpoint that crosses over re-enables interpolation. Counting only true interpolations would leave the safeguard on for good; on concave curves that converged more slowly in a simulation.
+- **Interpolation fallback.** If `s_hi ≤ s_lo`, or either is NaN, take the midpoint. With finite scores this cannot happen, because `s_hi ≥ target > s_lo`.
+- **Cached picks.** The cached→midpoint→stop rule applies to the both-seen branch. The single-bound branches also stop if their pick is cached. Neither can happen with the other rules in place, because every pick lies strictly between the scored bounds and at or below `cap`. The stop reports the usual Found/Pruned/Unreachable fallback.
+- **`Unreachable.best_q`** is the scored `q` with the highest score (a NaN never beats a number; ties go to the lower `q`). `evals` in every outcome counts all encodes, including too-big ones.
+- **What Unreachable and Pruned mean.** Neither proves that `q_max` fails. They only mean that no pass was seen within `max_evals`. With the defaults, "only failures seen" reaches `q_max` within 6 evals only when `q0 ≥ 60`, and "only passes seen" walks down at most 40. A prior more than 40 below the answer therefore reports Unreachable for a reachable codec. A prior far above it returns a valid but larger Found.
+  - Seeded property test, 20,000 random curves: every invariant holds, and on monotone curves every sub-optimal result is explained by the slack stop or the eval budget.
+  - With a prior within ±16 of the answer: 96.8% of results are exact, 99.2% are within 1 q, and the mean is 4.0 evals. Larger gaps come only from the +0.5 slack stop on flat curves; the worst seen was 6 q. There were no false Unreachable results.
+  - T6 should report how often the budget runs out. If the re-fitted prior misses by more than 40 in practice, consider probing `cap` on the last eval when only failures have been seen, or doubling the step.
 
 Initial-q prior (`prior_q`) is linear interpolation over these points, fitted from the kodim01 probe searches:
 
@@ -214,7 +231,18 @@ Reference points:
     - The gate is a counting semaphore of `--max-memory` bytes (default 1 GiB). An image acquires its cost before decoding and releases it when done.
     - An image whose cost exceeds the whole budget waits until nothing else is in flight, then runs alone. It never deadlocks.
     - Blocking a rayon worker is acceptable here, because the gate is taken only at the top-level per-image task and never nested.
+  - **Scheduler** [Reviewer]. The top level is `pool.broadcast` with a shared atomic cursor over the sorted list, **not** `par_iter`, for two reasons:
+    - `par_iter` splits the list recursively, so with 4 threads it starts items 0, 100, 50, 150, … rather than largest first.
+    - `par_iter` can nest. A worker that waits inside nested rayon work (oxipng `parallel`, which shares the pool) may steal another *top-level* item and start it on the same stack. Measured: about 100 nestings per 2,000 items.
+      - That inner item's `acquire` then waits for budget that the frame beneath it holds, and it deadlocks.
+      - A gate-plus-nested-`join` repro hung 4 times out of 4 with `par_iter`. It never hung with broadcast.
+      - Broadcast jobs cannot be stolen, so top-level items never nest.
+    - T6 must keep the pipeline off `par_iter` at the top level. Nested rayon *inside* one image is fine.
+  - Each image runs under `catch_unwind`, so a Rust panic in a decoder or encoder becomes an `error` record, and its guard is released during unwinding. The JSONL report is written line by line, so a hard crash (a C abort) keeps every finished record.
+  - A cost of 0 (the dimensions could not be read) never waits, even beside an oversize item. T6 must re-check `--max-pixels` after decoding, because such an image bypasses both the gate and the pixel cap.
+  - On Windows, Rust's `available_parallelism()` ignores the process affinity mask (it reports 28 under the bench's `0xFFFF` pin). The bench therefore passes `--jobs` explicitly.
   - The per-image constant becomes about 100 B/px once T1's lean metric lands. T6 re-measures it.
+    - [Reviewer] Measured on T1 (`bench_metric --ours-only`, whole-process peak working set, `Reference::new` plus 10 scores, both input buffers included): **134 B/px** for an opaque 3.45 MP image (`example.png`) and **182 B/px** for a 3.45 MP image with alpha. The cached reference is about 48 B/px per background (9 f32 planes over 6 scales), and an image with alpha caches two, black and white. Scoring an image with alpha also takes twice as long (1.16 s against 0.52 s at 3.45 MP). So "about 100 B/px" does not hold, and the gate's per-image cost should depend on alpha.
 - **Very large images:** `--max-pixels` defaults to 24 MP, which is ~3.8 GB at 160 B/px. The fix is a **tiled SSIMULACRA2** in Phase 3:
   - The per-scale statistics are pixel sums, so tiles 32-px-aligned (2^5 for 6 scales) with a ~160 px halo can reproduce the full-image score exactly.
   - That bounds memory at about 1344² px × 145 B ≈ 260 MB for any image size.
@@ -345,6 +373,13 @@ allow-registry = ["https://github.com/rust-lang/crates.io-index"]
 - **Inputs:** PNG (8 or 16 bit, reduced to 8), JPEG and WebP. Animated inputs (APNG, animated WebP) are skipped as `animated`.
 - **Candidates:** JPEG, lossy WebP, AVIF, lossless PNG, and the original.
 - **Fidelity:** EXIF orientation applied, the ICC profile carried (§3), alpha handled (§3), all other metadata stripped.
+- **Paths** [Reviewer]. These refine T4's output rules:
+  - The collision rule compares names case-insensitively on every OS. NTFS and APFS treat `A.avif` and `a.avif` as one file, and folding everywhere keeps output names identical across platforms.
+  - When two inputs share a case-folded relative path (the same name under two input roots, or `a.PNG` beside `a.png`), the first in path order wins. The others become `error` records; they are never silently overwritten, even with `--overwrite`. A per-run claim set backs this up at write time.
+  - An output folder inside an input folder is not searched, so a second run does not re-optimize its own outputs.
+  - "Output equals input" compares file identity (dev and inode on Unix, the canonical path on Windows), not only the spelling. So `--out in/sub/..` is refused.
+  - `--report` naming an input image is a usage error (exit 2).
+  - Outputs are opened with `create_new` unless `--overwrite` is given. `--jobs`, `--max-width` and `--max-height` must be at least 1.
 
 **Deferred:**
 
@@ -365,10 +400,10 @@ allow-registry = ["https://github.com/rust-lang/crates.io-index"]
 
 | Metric | Baseline to compare with (`bench/baseline/results.json`, Squoosh defaults) |
 |---|---|
-| Hit rate: share of outputs with score ≥ target, or kept original, or lossless | Squoosh defaults have no target. Their per-codec **minimum** scores are mozjpeg 67.7, webp 59.6, avif 48.7, jxl 69.0; their medians are 72.0 / 69.2 / 62.1 / 72.3. |
+| Hit rate: share of outputs with score ≥ target, or kept original, or lossless. [Reviewer] The denominator is every image; errors and `too-large` skips count as misses. | Squoosh defaults have no target. Their per-codec **minimum** scores are mozjpeg 67.7, webp 59.6, avif 48.7, jxl 69.0; their medians are 72.0 / 69.2 / 62.1 / 72.3. |
 | Total output bytes, median bpp, codec mix | Total bytes: mozjpeg 1,413,218; webp 1,258,088; avif 834,002; jxl 1,211,649 |
 | Min and median score | As above |
-| Mean evals per codec; time split between encode, decode and score | Naive bisection: 7–8 evals per codec |
+| Mean evals per codec (over images where that codec was searched); time split between encode, decode and score | Naive bisection: 7–8 evals per codec |
 | Wall time for the whole corpus | 37.23 s (5 fixed encodes per image, no scoring, 1 thread) |
 | Peak RSS | 829.27 MiB (OS maxRSS) |
 | Determinism: `--jobs 1` and `--jobs 28` outputs hash-identical | n/a |
@@ -452,6 +487,16 @@ pub fn ssimulacra2(reference: &[u8], distorted: &[u8], width: u32, height: u32) 
 2. `cargo run -p crumple-metric --release --example bench_metric -- bench/corpus/kodak/kodim01.png` prints the median of 10 for the crate time and for `Reference::score` time. **The cached score must be ≤ 0.75 × the crate time.** Also print the peak working set in B/px (report only, no pass/fail).
 3. `cargo check -p crumple-metric --target wasm32-unknown-unknown` passes.
 
+**T1 review** [Reviewer]:
+
+- **Parity is real.** The test calls the external `ssimulacra2::compute_frame_ssimulacra2` with the same `v/255.0` sRGB/BT.709 input. The ported loops in `ported.rs` differ from the 0.5.1 source only in visibility and `div_ceil`. Measured max |diff| = **0** (bit-identical) for 25 corpus files × 4 distortions.
+- **Added synthetic tests**, which also run in CI without the corpus:
+  - Bit-identical parity at 21 sizes: 8x8, 8x9, 9x8, 16x16, 17x17, odd sizes, 8x300, 300x8, 511x13, and others. They cover every point where the scale loop stops, including the final 4x4 scale that the crate still scores.
+  - Alpha parity: `score` equals `min(crate over black, crate over white)` on composites built by an independent integer implementation of `c·a/255 + bg·(1−a/255)`, with the distorted image composited with its **own** alpha. Changing only the distorted alpha lowers the score, and an opaque reference ignores the distorted alpha bytes.
+- **Fixed:** `check_len` computed `w·h·4` in u64. For 2^31 × 2^31 that overflows: a panic in debug, and in release a wrap to 0, so an empty buffer passed the check and later panicked inside `to_linear`. It now uses u128 and returns `BadLength`.
+- **Speed.** The bench now interleaves the crate and the cached score, because a sequential block under background load once measured 0.927. Pinned to P-cores (`0xFFFF`), 4 runs on kodim01 gave **0.585–0.594**, so the executor's 0.60 holds. It is 0.591 on `example.png`. Memory: see §5.
+- **License.** The BSD-2 text in `LICENSE-ssimulacra2` is identical to the crate's, and both ported files carry the header. `THIRD_PARTY_NOTICES.md` (T6) must reproduce it. SSIMULACRA2 was designed by Jon Sneyers (Cloudinary), and its reference implementation lives in libjxl (BSD-3-Clause). Crediting it as the origin of the algorithm and its weights is courteous, but the Rust crate's license does not require it.
+
 ---
 
 ### T2. `crumple-codecs`: encoders and decoders
@@ -526,6 +571,47 @@ Extract the ICC profile from PNG `iCCP`, JPEG APP2 (`icc_profile()`) and WebP `I
    | h) Errors | `decode(b"garbage")` returns `UnknownFormat` |
 
 2. `cargo build -p crumple-codecs --release` and `cargo build -p crumple-codecs --no-default-features --features jpeg,webp,png` both pass. The second must work **without nasm**.
+
+**T2 review** [Reviewer]. The acceptance numbers reproduce exactly: 72,721 B / 71.744, 77,422 B / 72.719, 36,604 B, and PNG 686,574 B.
+
+API additions (additive; the spec'd signatures are unchanged):
+
+- `decode_with_limit(bytes, max_pixels)`, and `decode` = `decode_with_limit(bytes, DEFAULT_MAX_PIXELS)` with `DEFAULT_MAX_PIXELS = 2^27` (~134 MP).
+  - The header's `w·h` is checked **before** the pixel buffer is allocated, and a size over the limit returns the new `CodecError::TooLarge { width, height }`.
+  - Before this, a ~100-byte PNG declaring 60000×60000 made the decoder call `vec![0; 14.4 GB]`, and an allocation failure aborts the process.
+  - WebP: image-webp only refuses `w·h ≥ 2^32`. It also allocated ICCP/EXIF chunks at their declared size, which was unchecked against the file length, so a 4 GiB claim was possible. The chunk limit is now the file size.
+  - AVIF: the AV1 sequence-header max frame size of the colour and alpha items is read with `avif-parse` (new direct dependency, `=2.1.0`, already in the graph and covered by the MPL-2.0 exception).
+  - JPEG: zune-jpeg's own 16,384 per-side cap is raised to 65,535 so legitimate panoramas decode, and `max_pixels` bounds them instead.
+- `sniff(bytes) -> Option<Format>` is now public.
+
+Found and fixed:
+
+- `encode`'s `w·h·4` was unchecked `usize` math: it panicked in debug and wrapped in release. It is now checked.
+- The libwebp wrappers now check their own buffer length, so they are sound without relying on the caller.
+- A 2-component JPEG decodes as raw "multiband" samples, not RGB. It now returns `Unsupported`, and every decode is checked to return exactly `w·h·4` bytes.
+- The mozjpeg error message is kept: "Maximum supported image dimension is 65500 pixels" instead of "panicked".
+- Non-RGB and empty ICC profiles are dropped (§3).
+
+Verified, with new tests in `tests/formats.rs` and `tests/robustness.rs`:
+
+- **PNG:** all 26 colour-type, depth and tRNS combinations expand to the exact expected RGBA8. That covers 1/2/4-bit gray, 16-bit via the high byte, palette with partial tRNS, and 16-bit RGB tRNS.
+- **JPEG colour models:** zune-jpeg outputs RGB for grayscale (R=G=B) and for CMYK/YCCK, using the inverted Adobe convention `C·K/255` as browsers do.
+- **JPEG ICC:** the APP2 layout is spec-correct (`ICC_PROFILE\0`, 1-based sequence number, count, ≤ 65,519 bytes) at 3,144, 65,519, 65,520 and 150,000 bytes, and each size round-trips.
+- **EXIF orientation:** 0–9, little- and big-endian, from all three containers; values outside 1..=8 give 1.
+- **Animation:** APNG and animated WebP are flagged, stills are not.
+- **AVIF depth:** ravif output is always 10-bit, so decode goes through `Rgb16`/`Rgba16`, and the `(v·255+32767)/65535` result matches the spec exactly.
+- **Determinism:** all 8 encoder configurations give identical bytes across 32 concurrent encodes.
+- **Robustness:** no panic, and no `Ok` of the wrong length, from truncations, 1,500 random mutations per sample, random bytes behind each magic, hostile EXIF, or extreme encode sizes. A one-off soak ran 40,000 mutations × 15 samples (PNG/JPEG/WebP, all variants).
+
+**Open problems. T6 must handle these:**
+
+1. **rav1d 1.1.0 aborts the process on some corrupt AVIF data.** It hits an `unwrap()` on `None` in `rav1d_decode_frame_init_cdf`, under `dav1d_send_data`, which is `extern "C"`. The panic cannot unwind, so `catch_unwind` cannot stop it. Two flipped bytes in a 364-byte AVIF from our own encoder are enough; the reproducer is the `#[ignore]`d test `rav1d_aborts_on_corrupt_avif`. So: **never decode input bytes that `sniff` reports as AVIF**. Skip them as unsupported (AVIF input is out of Phase 2 scope anyway), because a file with a `.jpg` name can contain AVIF. Candidates from `encode(Codec::Avif, …)` are safe. Reporting it upstream to rav1d is a public post and needs the user's OK.
+2. **Use `decode_with_limit(bytes, max_pixels)` for inputs.** That settles the "re-check `--max-pixels` after decoding" note in §5, and it refuses the image before allocation. Report `TooLarge` as `too-large`.
+3. **CMYK/YCCK JPEGs are converted without their (CMYK) ICC profile**, with the naive formula. The pixels Crumple scores and re-encodes can differ visibly from what a colour-managed viewer shows for the original. Recommendation: skip CMYK inputs in Phase 2, which needs a small `Decoded` flag or a policy in `decode`. This is a product decision for the lead.
+4. In **debug** builds, avif-parse's `debug_assert_eq!` panics on malformed AVIF boxes (release returns `Err`). The robustness tests tolerate exactly that message, and only in debug.
+5. mozjpeg errors unwind through C and are caught, but the default panic hook still prints them. For example, a JPEG candidate wider than 65,500 px prints a panic message. T6 can skip JPEG above 65,500 px, or quiet the hook.
+6. Cross-CPU determinism, AVX2 against scalar, is claimed by zune-jpeg (IDCT "bit identical") and by rav1e/libwebp, but is **untested** here. Invariant 3 only promises identical output within a CPU architecture. A CI job that compares output hashes across runners would catch drift.
+7. Cargo-deny could not be re-run from this review box. The only graph change is the new direct edge to `avif-parse`.
 
 ---
 

@@ -1,0 +1,49 @@
+[graph]
+targets = ["x86_64-pc-windows-msvc", "x86_64-unknown-linux-gnu", "aarch64-apple-darwin", "wasm32-unknown-unknown"]
+all-features = true
+
+[advisories]
+version = 2
+yanked = "deny"
+
+[licenses]
+version = 2
+confidence-threshold = 0.93
+# Anything not listed is rejected: GPL/AGPL/LGPL/SSPL/commercial fail by default.
+allow = [
+  "Apache-2.0", "Apache-2.0 WITH LLVM-exception", "MIT", "MIT-0", "BSD-2-Clause", "BSD-3-Clause",
+  "ISC", "Zlib", "0BSD", "CC0-1.0", "Unlicense", "BSL-1.0", "Unicode-3.0",
+  "IJG",  # mozjpeg / mozjpeg-sys / jpeg-encoder: IJG notice required in THIRD_PARTY_NOTICES
+]
+exceptions = [
+  # File-level copyleft. Ship unmodified, list in notices, publish any patch to its files.
+  { allow = ["MPL-2.0"], crate = "avif-parse" },
+]
+
+[licenses.private]
+ignore = true
+
+[bans]
+multiple-versions = "warn"
+wildcards = "deny"
+allow-wildcard-paths = true
+deny = [
+  { crate = "imagequant", reason = "GPL-3.0-or-later; use quantette" },
+  { crate = "jpegxl-rs", reason = "GPL-3.0-or-later wrapper" },
+  { crate = "jpegxl-sys", reason = "GPL-3.0-or-later wrapper" },
+  { crate = "dssim", reason = "AGPL-3.0" },
+  { crate = "dssim-core", reason = "AGPL-3.0" },
+  { crate = "jpegli-rs", reason = "AGPL-3.0-or-later" },
+  { crate = "zenjpeg", reason = "AGPL-3.0-only OR commercial" },
+  { crate = "zenpng", reason = "AGPL-3.0-only OR commercial" },
+  { crate = "zenquant", reason = "AGPL-3.0-only OR commercial" },
+  { crate = "zenwebp", reason = "AGPL-3.0-only OR commercial" },
+  { crate = "zenavif", reason = "AGPL-3.0-only OR commercial" },
+  { crate = "zenjxl", reason = "AGPL-3.0-only OR commercial" },
+  { crate = "jxl-encoder", reason = "AGPL-3.0-only OR commercial" },
+]
+
+[sources]
+unknown-registry = "deny"
+unknown-git = "deny"
+allow-registry = ["https://github.com/rust-lang/crates.io-index"]

@@ -1,0 +1,92 @@
+{
+  "startedAt": "2026-09-27T21:35:56.974Z",
+  "finishedAt": "2026-09-27T21:35:57.675Z",
+  "crumple": "node bench/crumple/fake-crumple.mjs",
+  "runsPerTarget": 1,
+  "env": {
+    "cpuModel": "Intel(R) Core(TM) i7-14700KF",
+    "logicalCores": 28,
+    "os": "Windows_NT 10.0.26200 x64",
+    "node": "v24.16.0",
+    "scheduling": {
+      "affinityMask": "0xffff",
+      "jobs": 16
+    }
+  },
+  "targets": [
+    {
+      "target": 80,
+      "images": 25,
+      "statuses": {
+        "optimized": 0,
+        "kept-original": 25,
+        "skipped": 0,
+        "error": 0
+      },
+      "hitRate": 1,
+      "totalBytes": 18804994,
+      "medianBpp": 12.593,
+      "minScore": null,
+      "medianScore": null,
+      "codecMix": {
+        "original": 25
+      },
+      "meanEvals": {},
+      "wallSeconds": 0.05,
+      "wallSecondsRuns": [
+        0.05
+      ],
+      "reportWallMs": 14,
+      "peakRssMiB": 57.04,
+      "exitCodes": [
+        0
+      ]
+    }
+  ],
+  "determinism": {
+    "target": 80,
+    "jobs": [
+      1,
+      16
+    ],
+    "exitCodes": [
+      0,
+      0
+    ],
+    "files": 25,
+    "identical": true,
+    "mismatches": []
+  },
+  "baseline": [
+    {
+      "codec": "mozjpeg",
+      "totalBytes": 1413218,
+      "minScore": 67.7,
+      "medianScore": 72.04
+    },
+    {
+      "codec": "webp",
+      "totalBytes": 1258088,
+      "minScore": 59.6,
+      "medianScore": 69.18
+    },
+    {
+      "codec": "avif",
+      "totalBytes": 834002,
+      "minScore": 48.7,
+      "medianScore": 62.14
+    },
+    {
+      "codec": "jxl",
+      "totalBytes": 1211649,
+      "minScore": 69,
+      "medianScore": 72.3
+    },
+    {
+      "codec": "oxipng",
+      "totalBytes": 16434569,
+      "minScore": null,
+      "medianScore": null
+    }
+  ]
+}
