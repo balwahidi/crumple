@@ -38,6 +38,17 @@ mask to `0xFFFF` (P-cores 0-15 on the i7-14700KF, as described in `bench/README.
 the crumple child processes inherit it, and `results.json` records the mask under
 `env.scheduling`. On Linux, pin with `taskset -c 0-15 node bench/crumple/run.mjs`.
 
+## Independent re-score
+
+`rescore.mjs` checks the outputs of the last run without any Crumple code: it decodes each file
+in `bench/out/crumple/t<T>/` with jSquash (Squoosh's decoders) and scores it with
+`ssimulacra2_rs`, the path `bench/baseline/run.mjs` used, so its scores compare directly with the
+baseline. It needs `npm ci` in `bench/` and `ssimulacra2_rs` on `PATH`.
+
+```sh
+node bench/crumple/rescore.mjs --targets 70,80,90
+```
+
 ## Testing the harness without the real binary
 
 `fake-crumple.mjs` accepts the `optimize` flags, copies every input unchanged and

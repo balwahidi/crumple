@@ -2,7 +2,7 @@
 
 mod budget;
 mod discover;
-mod pipeline_stub;
+mod pipeline;
 mod report;
 mod rss;
 
@@ -22,11 +22,8 @@ use clap::{Parser, Subcommand};
 
 use budget::MemoryBudget;
 use discover::Found;
-use pipeline_stub::{optimize_one, Codec, Status};
+use pipeline::{optimize_one, Codec, Status};
 use report::{Record, Summary};
-
-/// Bytes of working memory charged per pixel by the memory gate (§5).
-const BYTES_PER_PIXEL: u64 = 200;
 
 /// Local-first batch image optimizer (pre-alpha).
 #[derive(Parser, Debug)]
@@ -40,6 +37,16 @@ struct Cli {
 enum Command {
     /// Optimize image files or folders (recursive) into an output folder.
     Optimize(OptimizeArgs),
+    /// Print the SSIMULACRA2 score of <DISTORTED> against <REFERENCE> (100 = identical).
+    ///
+    /// Both images may be PNG, JPEG, WebP or AVIF. A corrupt AVIF file can abort this
+    /// command (a bug in the rav1d decoder); `optimize` never decodes AVIF input for that reason.
+    Score {
+        /// Reference image.
+        reference: PathBuf,
+        /// Distorted image, same size as the reference.
+        distorted: PathBuf,
+    },
 }
 
 #[derive(clap::Args, Debug)]
@@ -98,12 +105,12 @@ pub(crate) enum Formats {
 
 /// Settings handed to the per-image pipeline.
 #[derive(Debug, Clone)]
-#[allow(dead_code)] // read by the real pipeline (T6)
 pub(crate) struct Settings {
     pub target: f64,
     pub formats: Formats,
     pub max_width: Option<u32>,
     pub max_height: Option<u32>,
+    pub max_pixels: u64,
 }
 
 fn parse_target(s: &str) -> Result<f64, String> {
@@ -176,6 +183,47 @@ fn main() -> ExitCode {
     let cli = Cli::parse();
     match cli.command {
         Command::Optimize(args) => run(args),
+        Command::Score {
+            reference,
+            distorted,
+        } => score(&reference, &distorted),
+    }
+}
+
+/// Decodes a user-supplied image for `crumple score`, oriented as displayed.
+///
+/// Unlike `optimize`, this decodes AVIF: most `optimize` outputs are AVIF, and checking them
+/// is what `score` is for. rav1d 1.1 aborts the process on some corrupt AV1 data
+/// (memorysafety/rav1d#1497), which here ends only this one command with a non-zero exit.
+fn load_for_score(path: &Path) -> Result<(Vec<u8>, u32, u32), String> {
+    let bytes = std::fs::read(path).map_err(|e| format!("{}: {e}", path.display()))?;
+    let d = crumple_codecs::decode(&bytes).map_err(|e| format!("{}: {e}", path.display()))?;
+    Ok(crumple_core::apply_orientation(
+        &d.rgba,
+        d.width,
+        d.height,
+        d.exif_orientation,
+    ))
+}
+
+fn score(reference: &Path, distorted: &Path) -> ExitCode {
+    let result = (|| {
+        let (r, rw, rh) = load_for_score(reference)?;
+        let (d, dw, dh) = load_for_score(distorted)?;
+        if (rw, rh) != (dw, dh) {
+            return Err(format!("size mismatch: {rw}x{rh} against {dw}x{dh}"));
+        }
+        crumple_metric::ssimulacra2(&r, &d, rw, rh).map_err(|e| format!("metric: {e:?}"))
+    })();
+    match result {
+        Ok(s) => {
+            println!("{s:.4}");
+            ExitCode::SUCCESS
+        }
+        Err(e) => {
+            eprintln!("error: {e}");
+            ExitCode::from(1)
+        }
     }
 }
 
@@ -225,6 +273,7 @@ fn run(args: OptimizeArgs) -> ExitCode {
         formats: args.formats.clone(),
         max_width: args.max_width.map(NonZeroU32::get),
         max_height: args.max_height.map(NonZeroU32::get),
+        max_pixels: args.max_pixels,
     };
 
     // An output folder inside an input folder is not searched, so a second run
@@ -416,13 +465,25 @@ fn process(
     if t.pixels.is_some_and(|p| p > args.max_pixels) {
         return Record::bare(disp(input), "skipped", "too-large", target);
     }
-    let cost = t.pixels.unwrap_or(0).saturating_mul(BYTES_PER_PIXEL);
+    let read_err =
+        |e: std::io::Error| Record::bare(disp(input), "error", &format!("read: {e}"), target);
+    // The cost depends only on the format, so price the image from its first bytes and read
+    // the whole file after the gate admits it: a worker waiting for budget holds no file.
+    let head = match read_head(input) {
+        Ok(h) => h,
+        Err(e) => return read_err(e),
+    };
+    // Cost 0 (size unreadable) never waits; the pipeline re-checks --max-pixels after decode.
+    let cost = t
+        .pixels
+        .unwrap_or(0)
+        .saturating_mul(pipeline::bytes_per_pixel(&head));
     let _guard = budget.acquire(cost);
+    // `ms` in the report is the image's own time, not the time it waited for budget.
     let started = Instant::now();
-
     let bytes = match std::fs::read(input) {
         Ok(b) => b,
-        Err(e) => return Record::bare(disp(input), "error", &format!("read: {e}"), target),
+        Err(e) => return read_err(e),
     };
     let outcome = optimize_one(input, &bytes, settings);
     let mut rec = Record {
@@ -431,6 +492,7 @@ fn process(
         status: match outcome.status {
             Status::Optimized => "optimized",
             Status::KeptOriginal => "kept-original",
+            Status::Skipped => "skipped",
             Status::Error => "error",
         },
         reason: outcome.reason.clone(),
@@ -443,7 +505,7 @@ fn process(
         evals: outcome.evals,
         ms: None,
     };
-    if outcome.status != Status::Error {
+    if matches!(outcome.status, Status::Optimized | Status::KeptOriginal) {
         let data: &[u8] = outcome.data.as_deref().unwrap_or(&bytes);
         let ext = outcome.codec.and_then(Codec::ext);
         match discover::output_path(&args.out, input, &t.found.rel, ext, t.collides) {
@@ -459,6 +521,14 @@ fn process(
     }
     rec.ms = Some(started.elapsed().as_millis() as u64);
     rec
+}
+
+/// Up to the first 64 bytes of a file: enough for `crumple_codecs::sniff`.
+fn read_head(path: &Path) -> std::io::Result<Vec<u8>> {
+    use std::io::Read;
+    let mut head = Vec::with_capacity(64);
+    File::open(path)?.take(64).read_to_end(&mut head)?;
+    Ok(head)
 }
 
 fn fail(rec: &mut Record, reason: String) {

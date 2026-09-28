@@ -249,10 +249,32 @@ impl Planner {
         u8::try_from(q).is_ok_and(|q| self.cache.contains_key(&q))
     }
 
+    /// §4.1 step 3, fit estimate: the highest q expected to fit under the size bound, by
+    /// linear interpolation of bytes between the failing `lo` and the lowest too-big encode
+    /// (`cap + 1`), clamped to `[lo+1, cap]`. `None` if nothing was too big.
+    fn fit_estimate(&self, lo: u8) -> Option<i32> {
+        let bound = self.size_bound?;
+        let (&q_big, big) = self.cache.iter().find(|(_, e)| e.too_big)?;
+        let b_lo = self.cache.get(&lo)?.bytes;
+        // Always true (lo fits, the too-big encode does not, and lo < cap < q_big), but a
+        // violated assumption must fall back to the plain step, not divide by zero.
+        if q_big <= lo || big.bytes <= b_lo || bound <= b_lo {
+            return None;
+        }
+        let frac = (bound - 1 - b_lo) as f64 / (big.bytes - b_lo) as f64;
+        let q = lo as i32 + (frac * f64::from(q_big - lo)).floor() as i32;
+        Some(q.clamp(lo as i32 + 1, self.cap.max(lo as i32 + 1)))
+    }
+
     fn pick(&mut self) -> Option<u8> {
         let step = self.cfg.step as i32;
         let q = match (self.lo, self.hi) {
             (None, None) => self.clamp(self.last_q? as i32 - step),
+            // A step past a too-big encode would probe `cap`, and if `cap` is too big as well
+            // the search walks down one q per eval. Aim at the size bound instead.
+            (Some((l, _)), None) if l as i32 + step > self.cap => self
+                .fit_estimate(l)
+                .map_or_else(|| self.clamp(l as i32 + step), |q| self.clamp(q)),
             (Some((l, _)), None) => self.clamp(l as i32 + step),
             (None, Some((h, _))) => self.clamp(h as i32 - step),
             (Some((l, s_lo)), Some((h, s_hi))) => {
@@ -439,6 +461,37 @@ mod tests {
         for q in scored(&steps) {
             assert!(1000 * (q as u64) < 50_000, "scored too-big q {q}");
         }
+        // 60 and 52 are too big, 44 fails; the fit estimate between 44 and 52 aims at 49,
+        // then 50 is too big, which leaves nothing between lo and cap.
+        assert_eq!(encodes(&steps), vec![60, 52, 44, 49, 50]);
+    }
+
+    /// §4.1 fit estimate. The first encode fits but fails and the next step overshoots the
+    /// size bound. Probing `cap` would walk down 94, 93, 92, 91 (one q per eval) and spend the
+    /// whole budget; interpolating bytes towards the bound lands on 91 at once.
+    #[test]
+    fn fit_estimate_aims_at_the_size_bound() {
+        let cfg = SearchConfig::new(80.0, 87);
+        let (o, steps) = run(cfg, Some(91_500), |q| q as f64 - 10.0);
+        // 87 fails (77), 95 is too big, 87 + floor(4499 / 8000 * 8) = 91 passes (81),
+        // then interpolation finds the minimal passing q.
+        assert_eq!(encodes(&steps), vec![87, 95, 91, 90]);
+        assert!(
+            matches!(
+                o,
+                Outcome::Found {
+                    q: 90,
+                    evals: 4,
+                    ..
+                }
+            ),
+            "{o:?}"
+        );
+        // Without a too-big encode the plain step applies, even when it is clamped to q_max.
+        let (_, steps) = run(SearchConfig::new(80.0, 70), Some(1_000_000), |q| {
+            q as f64 - 25.0
+        });
+        assert_eq!(encodes(&steps)[..3], [70, 78, 86]);
     }
 
     #[test]

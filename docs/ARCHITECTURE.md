@@ -87,9 +87,13 @@ The following rules apply to images with an alpha channel, ICC profiles, EXIF da
     - [Reviewer] JPEG does not use `write_icc_profile`: mozjpeg 0.10.13 numbers the APP2 chunks from 0, and zune-jpeg (like the ICC spec) needs 1-based numbers, so the profile would be lost on decode. T2 writes the APP2 markers itself (TODO in the code to switch back once ImageOptim/mozjpeg-rust#56 ships).
     - [Reviewer] `decode` drops a profile whose header names a non-RGB colour space (GRAY, CMYK, …), because it always returns RGB pixels. Embedding a grayscale or CMYK profile in an RGB output is invalid, and CMYK profiles are often over 500 KB. An empty profile counts as none, in `encode` and `decode`.
   - AVIF is skipped when a profile is present, because `ravif` 0.13 has no ICC API.
+    - [T6 review] This includes plain sRGB profiles, which many camera and phone JPEGs carry, so AVIF is skipped for a large share of real photos. Recognising sRGB profiles and dropping them for AVIF (sRGB is AVIF's default) is the obvious next step.
   - The metric runs on raw sRGB-assumed values, a known approximation for wide-gamut images.
 - **EXIF.** Orientation is applied to the pixels. All other metadata is stripped in Phase 2.
 - **Size limit.** `--max-pixels` defaults to 24 MP. Larger images are skipped with `reason: "too-large"` until the tiled metric exists (see §5).
+- **Codec limits** [T6]. JPEG is not a candidate above 65,500 px per side (mozjpeg), and WebP not above 16,383 px per side (`WEBP_MAX_DIMENSION`), so a long panorama still gets the other codecs instead of failing.
+- **Resize with no candidate** [T6 review]. With `--max-width`/`--max-height`, the original file is not a valid answer: writing it would ignore the resize. So the search has no size bound, and if nothing passes (for example `--target 100` on a JPEG input, which has no lossless candidate), the image is an `error` with `reason: "no-candidate-after-resize"` and nothing is written. PNG inputs always have the lossless candidate, at the new size.
+- **Skipped inputs** [T6]. `skipped` (never decoded): AVIF input (`avif-input`, see T2 open problem 1), CMYK/YCCK JPEG (`cmyk-unsupported`, T2 open problem 3), animated PNG/WebP (`animated`), and `too-large`. Content that is none of PNG/JPEG/WebP/AVIF is `unsupported`, whatever the file name says. Decode, encode and metric failures are `error`.
 
 ## 4. Quality-target search
 
@@ -112,6 +116,7 @@ Config (defaults): `step = 8`, `max_evals = 6`, `score_slack = 0.5`.
 3. **Pick the next `q`.** Every pick is finally clamped to `[q_min, cap]`.
    - Nothing scored yet, but the last encode was too big: `last_q − step`.
    - Only failures seen: `lo + step`.
+     - [T6 review] **Fit estimate.** If `lo + step > cap` because an encode was too big, pick instead the highest `q` expected to fit under the size bound: `lo + floor((size_bound − 1 − bytes(lo)) / (bytes(q_big) − bytes(lo)) · (q_big − lo))`, clamped to `[lo+1, cap]`. Here `q_big = cap + 1` is the lowest too-big `q`. Probing `cap` instead walked down one `q` per eval whenever `cap` was itself too big, and spent the whole budget proving Pruned; see "T6 measurement" below.
    - Only passes seen: `hi − step`.
    - Both seen: interpolate, `lo + round((target − s_lo)/(s_hi − s_lo) · (hi − lo))`, clamped to `[lo+1, hi−1]`.
      - If the last two interpolated picks landed on the same side, take the midpoint `(lo+hi)/2` instead. This is the bisection safeguard.
@@ -142,18 +147,23 @@ Config (defaults): `step = 8`, `max_evals = 6`, `score_slack = 0.5`.
   - Seeded property test, 20,000 random curves: every invariant holds, and on monotone curves every sub-optimal result is explained by the slack stop or the eval budget.
   - With a prior within ±16 of the answer: 96.8% of results are exact, 99.2% are within 1 q, and the mean is 4.0 evals. Larger gaps come only from the +0.5 slack stop on flat curves; the worst seen was 6 q. There were no false Unreachable results.
   - T6 should report how often the budget runs out. If the re-fitted prior misses by more than 40 in practice, consider probing `cap` on the last eval when only failures have been seen, or doubling the step.
+- **T6 measurement** [T6 review]. The first bench missed the "mean evals ≤ 4 at target 80" acceptance for WebP (4.76). The cause was the planner, not the prior:
+  - JPEG runs first and its result becomes WebP's size bound. WebP's prior encode then often fit but failed, `lo + 8` was too big, and every later pick was `cap`, one `q` lower each time. 11 of 25 WebP searches used all 6 evals, and 8 of them ended Pruned after probing 95, 94, 93, 92, 91.
+  - The same walk-down hit AVIF: 4 AVIF searches ended Pruned, so JPEG or WebP won those images with bigger files.
+  - A full q = 1..100 sweep of every image and codec (`bytes` and score per `q`) was replayed through the planner. The replay reproduced the bench exactly (totals, codec mix and mean evals at 70/80/90) and was used to compare fixes. Putting the likely winner (AVIF) first kept the bytes gain but moved the walk-down to JPEG and WebP (5.4 to 5.6 mean evals). The fit estimate above fixed both problems at every target: at 80, mean evals went from JPEG 2.64 / WebP 4.76 / AVIF 3.29 to 2.64 / 3.64 / 2.83, and total bytes fell from 1,800,628 to 1,765,791, because AVIF is no longer pruned before it finds its answer.
+  - At target 80, 1 of 74 searches still uses all 6 evals (a JPEG search, which runs first and is unaffected), against 16 before.
 
-Initial-q prior (`prior_q`) is linear interpolation over these points, fitted from the kodim01 probe searches:
+Initial-q prior (`prior_q`) is linear interpolation over these points. T6 re-fitted them on the 25-image corpus: per codec and target, the median over images of the lowest `q` whose score meets the target, from the full q = 1..100 sweep (no size bound). The kodim01 probe values were JPEG 73/87/98, WebP 69/83/96 and AVIF 78/86/94.
 
 | Target | 70 | 80 | 90 |
 |---|---:|---:|---:|
-| JPEG (C mozjpeg) | 73 | 87 | 98 |
-| WebP (libwebp) | 69 | 83 | 96 |
-| AVIF (ravif, speed 6) | 78 | 86 | 94 |
+| JPEG (C mozjpeg) | 74 | 87 | 98 |
+| WebP (libwebp) | 76 | 87 | 98 |
+| AVIF (ravif, speed 6) | 76 | 86 | 94 |
 
+- The medians are over images where the codec reaches the target at some `q`. At target 90, WebP never reaches it on 10 of 25 images (even at q = 100), so its 98 is the median of 15. JPEG at 90 misses on 1 image. AVIF excludes `example.png` (it has an ICC profile) at every target.
 - Below 70, the prior extrapolates with the 70→80 slope. Above 90 it uses the 80→90 slope.
 - The result is clamped to 1..100.
-- T6 re-fits the table on the corpus.
 
 **Caching and early exit, in summary:**
 
@@ -227,7 +237,7 @@ Reference points:
     - The unbounded 28-thread probe batch peaked at **1,117 MiB**, and at 568 MiB with 8 threads.
     - Squoosh's sequential baseline peaked at 829 MiB.
   - Design, the memory gate (T4):
-    - Each image costs `w·h·200 B` (the metric at ~145 B/px, plus source, candidate and encoder scratch).
+    - Each image costs `w·h·200 B` (the metric at ~145 B/px, plus source, candidate and encoder scratch). T6 made this depend on the input format; see the measurements below.
     - The gate is a counting semaphore of `--max-memory` bytes (default 1 GiB). An image acquires its cost before decoding and releases it when done.
     - An image whose cost exceeds the whole budget waits until nothing else is in flight, then runs alone. It never deadlocks.
     - Blocking a rayon worker is acceptable here, because the gate is taken only at the top-level per-image task and never nested.
@@ -243,6 +253,9 @@ Reference points:
   - On Windows, Rust's `available_parallelism()` ignores the process affinity mask (it reports 28 under the bench's `0xFFFF` pin). The bench therefore passes `--jobs` explicitly.
   - The per-image constant becomes about 100 B/px once T1's lean metric lands. T6 re-measures it.
     - [Reviewer] Measured on T1 (`bench_metric --ours-only`, whole-process peak working set, `Reference::new` plus 10 scores, both input buffers included): **134 B/px** for an opaque 3.45 MP image (`example.png`) and **182 B/px** for a 3.45 MP image with alpha. The cached reference is about 48 B/px per background (9 f32 planes over 6 scales), and an image with alpha caches two, black and white. Scoring an image with alpha also takes twice as long (1.16 s against 0.52 s at 3.45 MP). So "about 100 B/px" does not hold, and the gate's per-image cost should depend on alpha.
+    - [T6] The gate charges **200 B/px for JPEG input and 260 B/px for everything else**. Alpha is unknown before decoding, so every format that can carry alpha pays the alpha rate. The cost is read from the file's first 64 bytes; the whole file is read only after the gate admits the image, so a worker waiting for budget holds no file.
+    - [T6 review] Measured with the full pipeline (`optimize --jobs 1`, whole-process peak working set) on synthetic 4000x3000 (12 MP) mosaics of the Kodak photos: **134 B/px** for an opaque JPEG input, **135 B/px** for an opaque PNG (the lossless PNG candidate adds little) and **184 B/px** for a PNG with alpha. The charges are therefore 1.4–1.9x the measured peaks, which leaves room for per-thread overhead on small images.
+    - An image that costs more than the whole budget runs alone, so `--max-memory` is not a hard cap: the 12 MP image with alpha peaked at 2.2 GB under the default 1 GiB budget.
 - **Very large images:** `--max-pixels` defaults to 24 MP, which is ~3.8 GB at 160 B/px. The fix is a **tiled SSIMULACRA2** in Phase 3:
   - The per-scale statistics are pixel sums, so tiles 32-px-aligned (2^5 for 6 scales) with a ~160 px halo can reproduce the full-image score exactly.
   - That bounds memory at about 1344² px × 145 B ≈ 260 MB for any image size.
@@ -302,6 +315,8 @@ Risks for A:
    - oxipng (MIT).
 
    Any new `-sys` crate needs a manual review of its vendored sources.
+
+   [T6 review] `THIRD_PARTY_NOTICES.md` is generated by `node tools/gen-notices.mjs` (`--check` verifies it is current). The hand-written sections above live in the script and name files inside the crates, so a dependency bump that moves them fails the run. The crate list comes from `cargo tree` over the Windows, Linux and macOS release targets, and each crate's license files come from its published source. Five crates publish no license file; their texts are in `tools/notices/`, copied from the upstream repositories at a recorded commit (`tools/notices/sources.json`). `libwebp-sys` has no license file even upstream, so the standard MIT text is used. The review also added two notices the list above missed: `x86inc.asm` (x264 project, ISC), bundled in both rav1e and rav1d, and the Alliance for Open Media and VideoLAN/dav1d copyright lines inside rav1e.
 4. **Squoosh-derived code** keeps its Apache-2.0 attribution in `NOTICE`. Do not use "Squoosh" in the product name, domain or logo.
 5. **The draft `deny.toml`** below was tested with `cargo-deny` 0.20.2. `check licenses bans sources` **passes** on the full native-probe graph (4 targets, all features). In a negative test it **rejects** `imagequant` (GPL-3.0-or-later) and `dssim-core` (AGPL-3.0), each by both license and ban.
 
@@ -370,6 +385,7 @@ allow-registry = ["https://github.com/rust-lang/crates.io-index"]
     - `--report <file.jsonl>`, `--overwrite` and `--dry-run`.
   - `same` restricts output to the input's own family: JPEG → jpeg, PNG → png lossless, WebP → webp.
 - **`crumple score <reference> <distorted>`** prints SSIMULACRA2. It is useful for users and for the bench.
+  - [T6 review] `score` decodes AVIF as well as PNG, JPEG and WebP. Most `optimize` outputs are AVIF, and checking them is the command's main use. rav1d 1.1.0 aborts the process on corrupt AV1 data (memorysafety/rav1d#1497, fix in PR #1503, both open), but in `score` that ends only the one command with a non-zero exit. `optimize` still never decodes AVIF *input*, because an abort there would end the whole batch.
 - **Inputs:** PNG (8 or 16 bit, reduced to 8), JPEG and WebP. Animated inputs (APNG, animated WebP) are skipped as `animated`.
 - **Candidates:** JPEG, lossy WebP, AVIF, lossless PNG, and the original.
 - **Fidelity:** EXIF orientation applied, the ICC profile carried (§3), alpha handled (§3), all other metadata stripped.
@@ -832,6 +848,19 @@ Do **not** depend on `crumple-codecs` or `crumple-metric`. T6 wires those in.
    - mean evals ≤ 4 per codec at target 80;
    - corpus wall time at target 80 ≤ 60 s on the dev box.
 3. Report the total bytes at target 70 against Squoosh-default mozjpeg (1,413,218 B, min score 67.7).
+
+**T6 review** [Reviewer]. Final bench (`--targets 70,80,90 --runs 3 --determinism`, pinned to P-cores, `--jobs 16`), after the review fixes:
+
+| Target | Total bytes | Hit rate | Min / median score (own) | Mean evals JPEG / WebP / AVIF | Wall s (median of 3) | Peak RSS |
+|---:|---:|---:|---|---|---:|---:|
+| 70 | 1,138,078 | 100% | 70.00 / 70.34 | 4.12 / 3.96 / 3.71 | 22.84 | 498 MiB |
+| 80 | 1,765,791 | 100% | 80.00 / 80.60 | 2.64 / 3.64 / 2.83 | 22.93 | 501 MiB |
+| 90 | 3,890,160 | 100% | 90.11 / 90.54 | 2.28 / 2.08 / 2.50 | 17.08 | 511 MiB |
+
+- Wall times moved by 2 to 3 s between two sessions with identical output (the earlier one: 21.37, 20.07, 15.93 s); the machine was not idle. Every acceptance item holds. Determinism: 25 of 25 files identical between `--jobs 1` and `--jobs 16`. At `--max-memory 512MiB`, target 80 peaked at 477 MiB (27.6 s, because `example.png` then costs more than the budget and runs alone) with byte-identical output. Target 70 is 19.5% smaller than Squoosh-default mozjpeg, with min score 70.00 against 67.7.
+- `bench/crumple/rescore.mjs` re-scores the outputs with the baseline's own decoders and `ssimulacra2_rs`: no output is below its target (lowest 70.00, 80.03, 90.18).
+- The executor's run (before the fit estimate) reproduced exactly from the q-sweep replay: 1,142,508 / 1,800,628 / 3,914,690 bytes, WebP 4.76 mean evals at 80.
+- Review fixes besides the planner: WebP skipped above 16,383 px per side (it failed the whole image before); a resize with no candidate is an error instead of writing the full-size original; the file is read after the memory gate admits the image (the executor had moved the read before it, so waiting workers held whole files outside the budget); `score` accepts AVIF; `THIRD_PARTY_NOTICES.md` is generated by `tools/gen-notices.mjs`.
 
 ## 10. Open questions and risks
 

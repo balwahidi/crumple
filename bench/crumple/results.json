@@ -1,8 +1,8 @@
 {
-  "startedAt": "2026-09-27T21:35:56.974Z",
-  "finishedAt": "2026-09-27T21:35:57.675Z",
-  "crumple": "node bench/crumple/fake-crumple.mjs",
-  "runsPerTarget": 1,
+  "startedAt": "2026-09-28T11:20:54.071Z",
+  "finishedAt": "2026-09-28T11:25:54.378Z",
+  "crumple": "<outside repo>/crumple.exe",
+  "runsPerTarget": 3,
   "env": {
     "cpuModel": "Intel(R) Core(TM) i7-14700KF",
     "logicalCores": 28,
@@ -15,30 +15,114 @@
   },
   "targets": [
     {
-      "target": 80,
+      "target": 70,
       "images": 25,
       "statuses": {
-        "optimized": 0,
-        "kept-original": 25,
+        "optimized": 25,
+        "kept-original": 0,
         "skipped": 0,
         "error": 0
       },
       "hitRate": 1,
-      "totalBytes": 18804994,
-      "medianBpp": 12.593,
-      "minScore": null,
-      "medianScore": null,
+      "totalBytes": 1138078,
+      "medianBpp": 0.846,
+      "minScore": 70,
+      "medianScore": 70.34,
       "codecMix": {
-        "original": 25
+        "avif": 23,
+        "webp": 1,
+        "jpeg": 1
       },
-      "meanEvals": {},
-      "wallSeconds": 0.05,
+      "meanEvals": {
+        "jpeg": 4.12,
+        "webp": 3.96,
+        "avif": 3.71
+      },
+      "wallSeconds": 22.838,
       "wallSecondsRuns": [
-        0.05
+        22.071,
+        22.838,
+        22.919
       ],
-      "reportWallMs": 14,
-      "peakRssMiB": 57.04,
+      "reportWallMs": 22909,
+      "peakRssMiB": 498.42,
       "exitCodes": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "target": 80,
+      "images": 25,
+      "statuses": {
+        "optimized": 25,
+        "kept-original": 0,
+        "skipped": 0,
+        "error": 0
+      },
+      "hitRate": 1,
+      "totalBytes": 1765791,
+      "medianBpp": 1.339,
+      "minScore": 80,
+      "medianScore": 80.6,
+      "codecMix": {
+        "avif": 24,
+        "webp": 1
+      },
+      "meanEvals": {
+        "jpeg": 2.64,
+        "webp": 3.64,
+        "avif": 2.83
+      },
+      "wallSeconds": 22.928,
+      "wallSecondsRuns": [
+        22.653,
+        24.539,
+        22.928
+      ],
+      "reportWallMs": 22917,
+      "peakRssMiB": 500.91,
+      "exitCodes": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "target": 90,
+      "images": 25,
+      "statuses": {
+        "optimized": 25,
+        "kept-original": 0,
+        "skipped": 0,
+        "error": 0
+      },
+      "hitRate": 1,
+      "totalBytes": 3890160,
+      "medianBpp": 2.806,
+      "minScore": 90.11,
+      "medianScore": 90.54,
+      "codecMix": {
+        "avif": 24,
+        "jpeg": 1
+      },
+      "meanEvals": {
+        "jpeg": 2.28,
+        "webp": 2.08,
+        "avif": 2.5
+      },
+      "wallSeconds": 17.083,
+      "wallSecondsRuns": [
+        16.886,
+        17.838,
+        17.083
+      ],
+      "reportWallMs": 17072,
+      "peakRssMiB": 511.4,
+      "exitCodes": [
+        0,
+        0,
         0
       ]
     }

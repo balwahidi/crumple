@@ -401,6 +401,9 @@ name = "crumple-cli"
 version = "0.0.0"
 dependencies = [
  "clap",
+ "crumple-codecs",
+ "crumple-core",
+ "crumple-metric",
  "imagesize",
  "libc",
  "rayon",

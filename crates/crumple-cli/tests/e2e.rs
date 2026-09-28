@@ -201,3 +201,60 @@ fn usage_errors_exit_2() {
     assert_eq!(o.status.code(), Some(0));
     assert_eq!(String::from_utf8_lossy(&o.stdout).trim(), "crumple 0.0.0");
 }
+
+/// `score` decodes PNG, JPEG, WebP and AVIF (most `optimize` outputs are AVIF), prints one
+/// number, and fails with exit 1 on a size mismatch.
+#[test]
+fn score_reads_every_output_format() {
+    let tmp = tempfile::tempdir().unwrap();
+    let (w, h) = (64u32, 48u32);
+    let rgba: Vec<u8> = (0..w * h)
+        .flat_map(|i| {
+            let (x, y) = (i % w, i / w);
+            [(x * 4) as u8, (y * 5) as u8, ((x ^ y) * 3) as u8, 255]
+        })
+        .collect();
+    let write = |name: &str, codec, q| {
+        let bytes = crumple_codecs::encode(codec, &rgba, w, h, q, None).unwrap();
+        let p = tmp.path().join(name);
+        std::fs::write(&p, bytes).unwrap();
+        p
+    };
+    let reference = write("ref.png", crumple_codecs::Codec::PngLossless, 100);
+    let score = |dist: &std::path::Path| {
+        let o = crumple(&["score".as_ref(), reference.as_os_str(), dist.as_os_str()]);
+        assert_eq!(o.status.code(), Some(0), "{o:?}");
+        String::from_utf8(o.stdout)
+            .unwrap()
+            .trim()
+            .parse::<f64>()
+            .unwrap()
+    };
+    assert!(score(&reference) > 99.999);
+    for (name, codec) in [
+        ("d.jpg", crumple_codecs::Codec::Jpeg),
+        ("d.webp", crumple_codecs::Codec::WebpLossy),
+        ("d.avif", crumple_codecs::Codec::Avif),
+    ] {
+        // SSIMULACRA2 can go below 0 for a harsh encode of this synthetic pattern.
+        let s = score(&write(name, codec, 60));
+        assert!(s.is_finite() && s < 99.0, "{name}: {s}");
+    }
+    let small = crumple_codecs::encode(
+        crumple_codecs::Codec::PngLossless,
+        &rgba[..(w * 8 * 4) as usize],
+        w,
+        8,
+        100,
+        None,
+    )
+    .unwrap();
+    let small_path = tmp.path().join("small.png");
+    std::fs::write(&small_path, small).unwrap();
+    let o = crumple(&[
+        "score".as_ref(),
+        reference.as_os_str(),
+        small_path.as_os_str(),
+    ]);
+    assert_eq!(o.status.code(), Some(1), "{o:?}");
+}

@@ -17,7 +17,7 @@ import { execFileSync, spawnSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
 import { existsSync, mkdirSync, openSync, readFileSync, readSync, closeSync, readdirSync, rmSync, writeFileSync } from 'node:fs';
 import os from 'node:os';
-import { dirname, join, relative, resolve, sep } from 'node:path';
+import { basename, dirname, isAbsolute, join, relative, resolve, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const here = dirname(fileURLToPath(import.meta.url));
@@ -226,8 +226,10 @@ if (flag('--determinism')) {
 const baseline = baselineComparison();
 const results = {
   startedAt, finishedAt: new Date().toISOString(),
-  // Repo-relative when possible, so results.json does not record local absolute paths.
-  crumple: CRUMPLE.map((p) => (p.startsWith(repoDir) ? relative(repoDir, p).split(sep).join('/') : p)).join(' '),
+  // Repo-relative when possible, and only the file name for a binary outside the repo, so
+  // results.json and RESULTS.md never record local absolute paths.
+  crumple: CRUMPLE.map((p) => (resolve(p).startsWith(repoDir + sep) ? relative(repoDir, resolve(p)).split(sep).join('/')
+    : isAbsolute(p) ? `<outside repo>/${basename(p)}` : p)).join(' '),
   runsPerTarget: RUNS,
   env: { cpuModel: os.cpus()[0]?.model?.trim(), logicalCores: os.cpus().length, os: `${os.type()} ${os.release()} ${os.arch()}`,
     node: process.version, scheduling },

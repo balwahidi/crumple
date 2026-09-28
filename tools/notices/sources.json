@@ -1,0 +1,38 @@
+{
+  "_comment": "License texts for crates whose published package ships no license file. Read by tools/gen-notices.mjs. Re-check the source when a crate's version changes.",
+  "atomig-macro": {
+    "version": "0.4.0",
+    "dir": "atomig-macro",
+    "source": "https://github.com/LukasKalbertodt/atomig",
+    "commit": "abd42e50a6a1b0615505189a780fcb5da19d7385",
+    "note": "Copied from the repository root, which the atomig-macro crate lives in."
+  },
+  "libwebp-sys": {
+    "version": "0.14.4",
+    "dir": "libwebp-sys",
+    "source": "https://github.com/NoXF/libwebp-sys",
+    "commit": "11b096bd65f0d51326673ae3e2e5af2dae02368f",
+    "note": "Neither the published crate nor its repository contains a license file or a copyright line. Its Cargo.toml declares `license = \"MIT\"` and lists XianYou and Kornel Lesiński as authors, so the standard MIT text (SPDX) is reproduced with a generic copyright line. The vendored libwebp C code has its own license, listed above."
+  },
+  "profiling": {
+    "version": "1.0.18",
+    "dir": "profiling",
+    "source": "https://github.com/aclysma/profiling",
+    "commit": "da44bd1c5497c665c0f00e5d70594fc14d390b4b",
+    "note": "Copied from the repository root."
+  },
+  "profiling-procmacros": {
+    "version": "1.0.18",
+    "dir": "profiling",
+    "source": "https://github.com/aclysma/profiling",
+    "commit": "da44bd1c5497c665c0f00e5d70594fc14d390b4b",
+    "note": "Copied from the repository root, which the profiling-procmacros crate lives in."
+  },
+  "simd_helpers": {
+    "version": "0.1.0",
+    "dir": "simd_helpers",
+    "source": "https://github.com/lu-zero/simd_helpers",
+    "commit": "82040194cd05affb060bf94d6f19f82a771d07fb",
+    "note": "Copied from the repository root."
+  }
+}
