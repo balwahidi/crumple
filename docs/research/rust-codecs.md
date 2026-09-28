@@ -357,7 +357,7 @@ The module is 1.56 MB and uses 62 MiB of linear memory.
 
 ## Sources
 
-- **[Reviewer]** Probe crates and logs (outside the repo), all under `C:\Users\bash\AppData\Local\Temp\claude\D--contrubution\3ccfb52c-3f1c-4e06-bf81-dbf3c1548bc1\scratchpad\`:
+- **[Reviewer]** Probe crates and logs (outside the repo, in a local scratch directory, not published):
   - `native-probe\` (`src\main.rs`, `run-*.txt`)
   - `wasm-probe\` (`run.txt`)
   - `jpegli-probe\` (`run.txt`)
@@ -374,4 +374,4 @@ The module is 1.56 MB and uses 62 MiB of linear memory.
   - [zune-jpegxl README](https://github.com/etemesi254/zune-image/tree/dev/crates/zune-jpegxl) (lossless encoder);
   - [image README](https://github.com/image-rs/image) (`avif-native`, `nasm`);
   - [gamut README](https://github.com/justin13888/gamut).
-- Probe crates and logs, kept outside the repo: `C:\Users\bash\AppData\Local\Temp\claude\D--contrubution\3ccfb52c-3f1c-4e06-bf81-dbf3c1548bc1\scratchpad\codec-probe\` (`results.txt`, `log-*.txt`).
+- Probe crates and logs, kept outside the repo in a local scratch directory (not published): `codec-probe\` (`results.txt`, `log-*.txt`).

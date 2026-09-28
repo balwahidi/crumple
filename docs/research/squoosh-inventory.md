@@ -1,6 +1,6 @@
 # Squoosh inventory: what it does, what Crumple can reuse, and what users want
 
-- Source: local read-only clone `D:\contrubution\squoosh`, HEAD `e8d35e0f` (2024-08-19, "Replace deprecated terser plugin (#1423)"), branch `dev`.
+- Source: local read-only clone of https://github.com/GoogleChromeLabs/squoosh, HEAD `e8d35e0f` (2024-08-19, "Replace deprecated terser plugin (#1423)"), branch `dev`.
 - GitHub data pulled on 2026-09-27 with `gh api` from `GoogleChromeLabs/squoosh`.
 - Repo status: the brief calls Squoosh "archived", but the GitHub API returns `archived: false`. The last commit on `dev` is still `e8d35e0f` from 2024-08-19. There are 153 open issues (not counting PRs) and 25,958 stars. The licence is Apache-2.0.
 - **[Reviewer] Upstream is being revived. This note missed it.** Jake Archibald has had a **draft PR [#1473](https://github.com/GoogleChromeLabs/squoosh/pull/1473) "Updating AVIF & JXL"** open since 2026-05-29. It is branch `ja/update-codecs`, with 41 commits and 229 files, and was last pushed on 2026-09-23 (checked 2026-09-27). Its commits:
